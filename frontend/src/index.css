@@ -180,6 +180,15 @@ input:-webkit-autofill:active {
     background: rgba(99, 102, 241, 0.2);
   }
 
+  /* Utility to hide scrollbars but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+
   /* -- Online Pulse Animation -- */
   @keyframes online-pulse {
     0% {

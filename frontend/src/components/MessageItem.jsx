@@ -349,7 +349,7 @@ const MessageItem = ({
                                     </div>
                                 ) : (
                                     <div className="px-1 py-0.5">
-                                        <div className="text-[14.5px] leading-relaxed whitespace-pre-wrap break-words font-medium text-left tracking-normal transition-all duration-300">
+                                        <div className="text-[14.5px] leading-relaxed whitespace-pre-wrap break-all font-medium text-left tracking-normal transition-all duration-300">
                                             {renderMessageText(msg.text)}
                                             {msg.isEdited && <span className={`text-[9px] font-black uppercase tracking-widest ml-2 ${isMe ? 'text-white/40' : 'text-slate-500/60'}`}>(edited)</span>}
                                         </div>
