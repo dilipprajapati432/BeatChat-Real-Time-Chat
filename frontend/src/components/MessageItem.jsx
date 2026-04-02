@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Trash2, Pencil, Check, CheckCheck, FileText, Download, Pin, AlertCircle, Reply, Star, CheckSquare } from 'lucide-react';
+import { Trash2, Pencil, Check, CheckCheck, FileText, Download, Pin, AlertCircle, Reply, Star, CheckSquare, Copy } from 'lucide-react';
 import useChatStore from '../stores/chatStore';
 import useSettingsStore from '../stores/settingsStore';
 import ImageLightbox from './ImageLightbox';
@@ -149,6 +149,13 @@ const MessageItem = ({
         if (timerRef.current) clearTimeout(timerRef.current);
     };
 
+    const handleCopy = () => {
+        if (!msg.text) return;
+        navigator.clipboard.writeText(msg.text);
+        if (window.navigator.vibrate) window.navigator.vibrate(20);
+        setActiveActionId(null);
+    };
+
     const groupedReactions = msg.reactions?.reduce((acc, r) => {
         acc[r.emoji] = r.users;
         return acc;
@@ -195,6 +202,11 @@ const MessageItem = ({
                     <div onClick={(e) => { e.stopPropagation(); setReplyingTo(msg); setActiveActionId(null); }} className="action-menu-item">
                         <Reply size={18} className="text-primary-400" />
                         <span>Reply</span>
+                    </div>
+
+                    <div onClick={(e) => { e.stopPropagation(); handleCopy(); }} className="action-menu-item">
+                        <Copy size={17} className="text-emerald-400" />
+                        <span>Copy</span>
                     </div>
                     
                     {isMe && canEdit() && (

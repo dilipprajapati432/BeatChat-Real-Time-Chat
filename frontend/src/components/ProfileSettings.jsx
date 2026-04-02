@@ -321,8 +321,8 @@ const ProfileSettings = ({ onBack, backHandlerRef }) => {
 
                 <div className="flex-1 overflow-hidden flex flex-col md:flex-row transition-all duration-500" style={{ minHeight: (window.innerWidth < 768 && !isMobileDetailView) ? 'auto' : 520, borderRadius: 24, border: '1px solid var(--settings-container-border)', boxShadow: '0 20px 80px rgba(0,0,0,0.5)', transform: 'translateZ(0)' }}>
                     {/* Sidebar / Tabs */}
-                    <div className={`w-full md:w-60 p-4 flex-shrink-0 transition-all duration-300 ${isMobileDetailView ? 'hidden md:block' : 'block'}`} style={{ background: 'var(--settings-panel-bg)', borderRight: '1px solid var(--settings-container-border)' }}>
-                        <div className="space-y-2">
+                    <div className={`w-full md:w-60 pt-4 px-4 pb-12 flex-shrink-0 transition-all duration-300 overflow-y-auto custom-scrollbar ${isMobileDetailView ? 'hidden md:block' : 'block'}`} style={{ background: 'var(--settings-panel-bg)', borderRight: '1px solid var(--settings-container-border)' }}>
+                        <div className="space-y-2 pb-6">
                             {[
                                 { id: 'profile', label: 'My Profile', icon: User },
                                 { id: 'chat_display', label: 'Chat & Display', icon: Palette },
@@ -376,7 +376,7 @@ const ProfileSettings = ({ onBack, backHandlerRef }) => {
                         )}
                         {/* Profile Tab */}
                         {activeTab === 'profile' && (
-                            <div className="max-w-xl animate-fade-in space-y-8">
+                            <div className="max-w-xl mx-auto animate-fade-in space-y-8 pb-12">
                                 {/* Avatar Section */}
                                 <div className="flex items-center gap-5">
                                     <div className="relative group flex-shrink-0">
@@ -441,7 +441,7 @@ const ProfileSettings = ({ onBack, backHandlerRef }) => {
 
                         {/* Password Tab */}
                         {activeTab === 'password' && (
-                            <div className="max-w-md animate-fade-in">
+                            <div className="max-w-md mx-auto animate-fade-in pb-12">
                                 <h3 className="text-xl font-bold text-white mb-6">Change Password</h3>
                                 <form onSubmit={handleChangePassword} className="space-y-4">
                                     {[{ label: 'Current Password', val: oldPassword, set: setOldPassword }, { label: 'New Password', val: newPassword, set: setNewPassword, min: 6 }, { label: 'Confirm New Password', val: confirmPassword, set: setConfirmPassword }].map(({ label, val, set, min }) => (
@@ -463,7 +463,7 @@ const ProfileSettings = ({ onBack, backHandlerRef }) => {
 
                         {/* Blocked Users Tab */}
                         {activeTab === 'blocked' && (
-                            <div className="max-w-xl animate-fade-in">
+                            <div className="max-w-xl mx-auto animate-fade-in pb-12">
                                 <h3 className="text-xl font-bold text-white mb-1">Blocked Users</h3>
                                 <p className="text-slate-500 text-sm mb-5">Blocked users cannot message you.</p>
                                 {fetchingBlocked ? <div className="flex justify-center p-8"><ClipLoader color="#8b5cf6" /></div>
@@ -492,7 +492,7 @@ const ProfileSettings = ({ onBack, backHandlerRef }) => {
 
                         {/* Hidden Chats Tab */}
                         {activeTab === 'hidden' && (
-                            <div className="max-w-xl animate-fade-in">
+                            <div className="max-w-xl mx-auto animate-fade-in pb-12">
                                 <h3 className="text-xl font-bold text-white mb-1">Hidden Chats</h3>
                                 <p className="text-slate-500 text-sm mb-5">Hidden chats won't appear in your main list.</p>
                                 {fetchingHidden ? <div className="flex justify-center p-8"><ClipLoader color="#8b5cf6" /></div>
@@ -521,7 +521,7 @@ const ProfileSettings = ({ onBack, backHandlerRef }) => {
 
                         {/* Danger Zone Tab */}
                         {activeTab === 'danger' && (
-                            <div className="max-w-xl animate-fade-in space-y-4">
+                            <div className="max-w-xl mx-auto animate-fade-in space-y-4 pb-12">
                                 <h3 className="text-xl font-bold text-white mb-2">Danger Zone</h3>
                                 <div className="p-5 rounded-2xl" style={{ background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.2)' }}>
                                     <h4 className="text-base font-bold mb-1" style={{ color: '#fbbf24' }}>Deactivate Account</h4>
@@ -542,7 +542,7 @@ const ProfileSettings = ({ onBack, backHandlerRef }) => {
 
                         {/* Chat & Display Tab */}
                         {activeTab === 'chat_display' && (
-                            <div className="max-w-xl animate-fade-in pb-4 space-y-8">
+                            <div className="max-w-xl mx-auto animate-fade-in pb-12 space-y-8">
                                 <h3 className="text-xl font-bold text-white mb-6">Chat & Display</h3>
 
                                 {/* Theme Selection */}
@@ -571,7 +571,7 @@ const ProfileSettings = ({ onBack, backHandlerRef }) => {
 
                         {/* Notifications Tab */}
                         {activeTab === 'notifications' && (
-                            <div className="max-w-xl animate-fade-in pb-4">
+                            <div className="max-w-xl mx-auto animate-fade-in pb-12">
                                 <h3 className="text-xl font-bold text-white mb-6">Notifications & Sounds</h3>
 
                                 <div className="space-y-4">
@@ -623,20 +623,20 @@ const ProfileSettings = ({ onBack, backHandlerRef }) => {
 
                         {/* About App Tab */}
                         {activeTab === 'about' && (
-                            <div className="max-w-xl animate-fade-in pb-4">
-                                <div className="p-5 sm:p-8 rounded-3xl bg-black/20 border border-white/5 shadow-2xl relative flex flex-col items-center overflow-hidden">
+                            <div className="max-w-2xl mx-auto animate-fade-in pb-12">
+                                <div className="p-6 sm:p-10 rounded-3xl bg-black/20 border border-white/5 shadow-2xl relative flex flex-col items-center overflow-hidden">
                                     <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-purple-500/5 to-pink-500/5 pointer-events-none" />
 
                                     {/* Branding Hero */}
-                                    <div className="relative z-10 flex flex-col items-center mb-8">
-                                        <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-[2px] shadow-2xl shadow-indigo-500/20 mb-5 group transition-transform hover:-translate-y-1 duration-300">
-                                            <div className="w-full h-full bg-[#1a1d27] rounded-[22px] overflow-hidden flex items-center justify-center p-3">
+                                    <div className="relative z-10 flex flex-col items-center mb-10">
+                                        <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-3xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-[2px] shadow-2xl shadow-indigo-500/20 mb-6 group transition-transform hover:-translate-y-1 duration-300">
+                                            <div className="w-full h-full bg-[#1a1d27] rounded-[22px] overflow-hidden flex items-center justify-center p-4">
                                                 <img src={logo} alt="BeatChat Logo" className="w-full h-full object-contain filter drop-shadow-[0_0_10px_rgba(139,92,246,0.3)] transition-transform group-hover:scale-110 duration-500" />
                                             </div>
                                         </div>
-                                        <h3 className="text-3xl font-bold bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-1">BeatChat</h3>
-                                        <div className="px-3 py-1 rounded-full bg-white/5 border border-white/5 backdrop-blur-sm">
-                                            <p className="text-[10px] font-bold text-slate-400 tracking-widest uppercase">Version 1.0.0 (Beta)</p>
+                                        <h3 className="text-4xl font-bold bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">BeatChat</h3>
+                                        <div className="px-4 py-1.5 rounded-full bg-white/5 border border-white/5 backdrop-blur-sm">
+                                            <p className="text-[11px] font-bold text-slate-400 tracking-widest uppercase">Version 1.0.0 (Beta)</p>
                                         </div>
                                     </div>
 

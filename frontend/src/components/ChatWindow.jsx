@@ -211,29 +211,41 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
     setSelectedIds(newSelected);
   };
 
-  const handleBatchDelete = async () => {
+  const handleBatchDelete = () => {
     if (selectedIds.size === 0) return;
-    try {
-      const token = useAuthStore.getState().token;
+    
+    setConfirmData({
+      title: 'Delete Messages',
+      message: `Are you sure you want to delete ${selectedIds.size} message${selectedIds.size > 1 ? 's' : ''}? This action cannot be undone.`,
+      isDanger: true,
+      confirmText: 'Delete Messages'
+    });
 
-      toast.promise(
-        axios.post(`${import.meta.env.VITE_API_URL}/api/messages/batch-delete`,
-          { ids: Array.from(selectedIds) },
-          { headers: { Authorization: `Bearer ${token}` } }
-        ),
-        {
-          loading: 'Deleting messages...',
-          success: 'Messages deleted successfully',
-          error: 'Failed to delete some messages'
-        }
-      );
-      setSelectionMode(false);
-      setSelectedIds(new Set());
-      // Optimistic cache update would be better here, but fetch works safely
-      setTimeout(() => fetchMessages(currentChat), 500);
-    } catch (err) {
-      console.error(err);
-    }
+    setConfirmAction(() => async () => {
+      try {
+        const token = useAuthStore.getState().token;
+
+        toast.promise(
+          axios.post(`${import.meta.env.VITE_API_URL}/api/messages/batch-delete`,
+            { ids: Array.from(selectedIds) },
+            { headers: { Authorization: `Bearer ${token}` } }
+          ),
+          {
+            loading: 'Deleting messages...',
+            success: 'Messages deleted successfully',
+            error: 'Failed to delete some messages'
+          }
+        );
+        setSelectionMode(false);
+        setSelectedIds(new Set());
+        // Optimistic cache update would be better here, but fetch works safely
+        setTimeout(() => fetchMessages(currentChat), 500);
+      } catch (err) {
+        console.error(err);
+      }
+    });
+
+    setConfirmOpen(true);
   };
 
   const handleCopySelected = () => {
