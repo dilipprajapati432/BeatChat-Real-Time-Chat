@@ -188,6 +188,24 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages.length]);
 
+  // Auto-resize message input height
+  useEffect(() => {
+    if (textInputRef.current) {
+      textInputRef.current.style.height = '48px'; // Base height
+      const scrollHeight = textInputRef.current.scrollHeight;
+      if (scrollHeight > 48) {
+        textInputRef.current.style.height = `${Math.min(scrollHeight, 140)}px`;
+      }
+    }
+  }, [text]);
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey && window.innerWidth > 768) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
   const toggleSelectMessage = (id) => {
     const newSelected = new Set(selectedIds);
     if (newSelected.has(id)) newSelected.delete(id);
@@ -1138,7 +1156,8 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
                 <div className="flex items-end">
 
                   {/* Media Attach Button */}
-                  <div className="flex-shrink-0 flex items-center gap-1 pl-1">
+                  {/* Media Attach Button - Hidden when typing on mobile to save space */}
+                  <div className={`flex-shrink-0 flex items-center gap-1 pl-1 transition-all duration-300 ${text.trim() ? 'max-w-0 opacity-0 overflow-hidden ml-[-8px]' : 'max-w-[100px] opacity-100'}`}>
                     <label className={`p-2.5 rounded-full hover:bg-white/5 text-slate-400 hover:text-white transition-all duration-200 cursor-pointer ${isBlocked || isSending ? 'opacity-50 pointer-events-none' : ''}`}>
                       <input
                         ref={docInputRef}
@@ -1172,16 +1191,16 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
                         <button type="button" onClick={() => setImage(null)} className="text-slate-500 hover:text-rose-500 transition-colors bg-white/5 rounded-full p-1.5"><X size={14} /></button>
                       </div>
                     )}
-                    <input
+                    <textarea
                       ref={textInputRef}
-                      type="text"
                       value={text}
                       onChange={handleTyping}
+                      onKeyDown={handleKeyDown}
                       onFocus={() => setIsFocused(true)}
                       onBlur={() => { setIsFocused(false); setTimeout(() => setMentionQuery(null), 200); }}
                       placeholder={isBlocked ? "You have blocked this user" : "Write something..."}
                       disabled={isBlocked || isSending}
-                      className="w-full bg-transparent border-0 py-3.5 px-3 focus:outline-none focus:ring-0 focus:border-none text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium disabled:opacity-50 text-[15px]"
+                      className="w-full bg-transparent border-0 py-3 px-3 focus:outline-none focus:ring-0 focus:border-none text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium disabled:opacity-50 text-[15px] resize-none overflow-y-auto min-h-[48px] max-h-[140px] chat-scrollbar"
                     />
                   </div>
 

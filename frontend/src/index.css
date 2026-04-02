@@ -172,6 +172,14 @@ input:-webkit-autofill:active {
     background: rgba(99, 102, 241, 0.35);
   }
 
+  /* Specific scrollbar for message input textarea */
+  .chat-scrollbar-input::-webkit-scrollbar {
+    width: 3px;
+  }
+  .chat-scrollbar-input::-webkit-scrollbar-thumb {
+    background: rgba(99, 102, 241, 0.2);
+  }
+
   /* -- Online Pulse Animation -- */
   @keyframes online-pulse {
     0% {
@@ -879,11 +887,21 @@ html:not(.dark) .text-slate-200 {
   border: 1px solid rgba(255, 255, 255, 0.12) !important;
   backdrop-filter: blur(40px) saturate(220%) !important;
   -webkit-backdrop-filter: blur(40px) saturate(220%) !important;
+  z-index: 50 !important;
 }
 
 .epr-main .epr-search-container {
-  padding: 16px !important;
-  background: linear-gradient(to bottom, #0f1117, transparent) !important;
+  padding: 14px 16px !important;
+  background: transparent !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.epr-main .epr-skin-tones {
+  position: static !important;
+  margin-left: auto !important;
+  padding: 0 !important;
 }
 
 .epr-main .epr-search {
