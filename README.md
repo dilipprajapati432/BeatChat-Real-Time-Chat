@@ -4,15 +4,17 @@ BeatChat is a real-time chat application built using the MERN stack and Socket.i
 
 ## Screenshots
 
-<img width="1918" height="1023" alt="image" src="https://github.com/user-attachments/assets/686155cb-446d-4b40-9782-0cb8b7729c9e" />
+<img width="1918" height="1022" alt="image" src="https://github.com/user-attachments/assets/5fe7781f-304e-4b19-9928-f6ff89894340" />
 
-<img width="1918" height="1026" alt="image" src="https://github.com/user-attachments/assets/541cae2a-43bb-4f60-8184-86e794ce0655" />
+<img width="1918" height="1028" alt="image" src="https://github.com/user-attachments/assets/a524fb98-8072-43f0-a112-f988cc0a3960" />
 
-<img width="1916" height="1026" alt="image" src="https://github.com/user-attachments/assets/1c5a1ce6-c06f-40c0-bb65-b01955a5b57d" />
+<img width="1918" height="1021" alt="image" src="https://github.com/user-attachments/assets/d3987e7a-a119-41ad-8587-118bbc0dc13b" />
 
-<img width="1918" height="1022" alt="image" src="https://github.com/user-attachments/assets/4df186b0-a0b7-43f3-b1e2-bfd1246b55c3" />
+<img width="1918" height="1017" alt="image" src="https://github.com/user-attachments/assets/27f475b6-74ce-4187-84d3-ef3664bc3ad2" />
 
-<img width="1902" height="1000" alt="image" src="https://github.com/user-attachments/assets/9ab5798a-8e4f-47ee-b4b8-f4d89a15b7fe" />
+<img width="1918" height="1021" alt="image" src="https://github.com/user-attachments/assets/1adb8082-bbea-48b2-a765-3ec65df15597" />
+
+<img width="1918" height="1032" alt="image" src="https://github.com/user-attachments/assets/f0154c24-ced3-4704-ab97-bc0bb4d44e90" />
 
 
 ## Features
