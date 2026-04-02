@@ -122,12 +122,11 @@ const ProfileSettings = ({ onBack, backHandlerRef }) => {
             // Update local users list using the standardized store method
             // This ensures the sidebar reflects the newly unhidden chat immediately
             useChatStore.getState().fetchUsers();
-            
-            // Reload user state to reflect changes in local auth store
-            const currentUser = JSON.parse(localStorage.getItem('user'));
-            if (currentUser && res.data.hiddenChats) {
-                const updatedUser = { ...currentUser, hiddenChats: res.data.hiddenChats };
-                login(updatedUser, token);
+
+            // Update auth store user state
+            const { user, setUser } = useAuthStore.getState();
+            if (user && res.data.hiddenChats) {
+                setUser({ ...user, hiddenChats: res.data.hiddenChats });
             }
         } catch (err) {
             toast.error("Failed to unhide chat");
@@ -627,7 +626,7 @@ const ProfileSettings = ({ onBack, backHandlerRef }) => {
                             <div className="max-w-xl animate-fade-in pb-4">
                                 <div className="p-5 sm:p-8 rounded-3xl bg-black/20 border border-white/5 shadow-2xl relative flex flex-col items-center overflow-hidden">
                                     <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-purple-500/5 to-pink-500/5 pointer-events-none" />
-                                    
+
                                     {/* Branding Hero */}
                                     <div className="relative z-10 flex flex-col items-center mb-8">
                                         <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-[2px] shadow-2xl shadow-indigo-500/20 mb-5 group transition-transform hover:-translate-y-1 duration-300">
@@ -693,7 +692,7 @@ const ProfileSettings = ({ onBack, backHandlerRef }) => {
                                             <Briefcase size={16} className="text-indigo-400" />
                                             <h4 className="text-xs font-bold text-slate-300 uppercase tracking-[0.2em]">Contact & Support</h4>
                                         </div>
-                                        
+
                                         <div className="p-5 rounded-2xl bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-pink-500/10 border border-indigo-500/20 shadow-inner">
                                             <p className="text-sm text-slate-300 text-center mb-6">Need assistance or looking to collaborate? Reach out via the channels below.</p>
                                             <div className="flex flex-col sm:flex-row gap-3 w-full">

@@ -9,23 +9,23 @@ const formatTime = (dateString) => {
   if (!dateString) return '';
   const date = new Date(dateString);
   const now = new Date();
-  
+
   const isToday = date.toDateString() === now.toDateString();
   if (isToday) {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
-  
+
   const yesterday = new Date(now);
   yesterday.setDate(now.getDate() - 1);
   if (date.toDateString() === yesterday.toDateString()) {
     return 'Yesterday';
   }
-  
+
   const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
   if (diffDays < 7) {
     return date.toLocaleDateString([], { weekday: 'short' });
   }
-  
+
   return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
 };
 
@@ -51,9 +51,9 @@ const Sidebar = ({ isOpen, setIsOpen, setView, currentView }) => {
     users = [], setUsers, onlineUsers = [], setCurrentChat, currentChat,
     unreadCounts = {}, groups = [], fetchGroups, joinGroupRoom, leaveGroup, deleteGroup
   } = useChatStore();
-  
+
   const { user, logout, setUser } = useAuthStore();
-  
+
   const [activeTab, setActiveTab] = useState('chats');
   const [showCreateGroup, setShowCreateGroup] = useState(false);
   const [showJoinGroup, setShowJoinGroup] = useState(false);
@@ -75,13 +75,13 @@ const Sidebar = ({ isOpen, setIsOpen, setView, currentView }) => {
   const [showGroupSettings, setShowGroupSettings] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const isInitialMount = useRef(true);
-  
+
   useEffect(() => {
-     // Mark as not initial mount after the first layout 
-     const timer = setTimeout(() => {
-        isInitialMount.current = false;
-     }, 100);
-     return () => clearTimeout(timer);
+    // Mark as not initial mount after the first layout 
+    const timer = setTimeout(() => {
+      isInitialMount.current = false;
+    }, 100);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -90,29 +90,29 @@ const Sidebar = ({ isOpen, setIsOpen, setView, currentView }) => {
       try {
         const token = useAuthStore.getState().token;
         const { fetchUsers, fetchGroups } = useChatStore.getState();
-        
+
         // Fetch contacts locally as they are only used for search in Sidebar
-        const resContacts = await axios.get(import.meta.env.VITE_API_URL + '/api/users/contacts', { 
-          headers: { Authorization: `Bearer ${token}` } 
+        const resContacts = await axios.get(import.meta.env.VITE_API_URL + '/api/users/contacts', {
+          headers: { Authorization: `Bearer ${token}` }
         });
-        
+
         setContacts(resContacts.data);
-        
+
         // Use store to fetch users and groups
         await Promise.all([
           fetchUsers(),
           fetchGroups()
         ]);
-        
-      } catch (err) { 
-        console.error("Sidebar initial fetch error:", err); 
-      } finally { 
-        setLoading(false); 
+
+      } catch (err) {
+        console.error("Sidebar initial fetch error:", err);
+      } finally {
+        setLoading(false);
       }
     };
-    
+
     fetchData();
-    
+
     const close = () => setContextMenu(null);
     document.addEventListener('click', close);
     return () => document.removeEventListener('click', close);
@@ -170,7 +170,7 @@ const Sidebar = ({ isOpen, setIsOpen, setView, currentView }) => {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.success('Chat hidden');
-      
+
       if (res.data.hiddenChats) {
         setUser({ ...user, hiddenChats: res.data.hiddenChats });
       }
@@ -182,11 +182,11 @@ const Sidebar = ({ isOpen, setIsOpen, setView, currentView }) => {
   };
 
   const handleHideChat = (userId) => {
-    setConfirmData({ 
-      title: 'Hide Chat', 
-      message: 'Are you sure you want to hide this conversation? It will reappear if you receive a new message.', 
-      isDanger: false, 
-      confirmText: 'Hide' 
+    setConfirmData({
+      title: 'Hide Chat',
+      message: 'Are you sure you want to hide this conversation? It will reappear if you receive a new message.',
+      isDanger: false,
+      confirmText: 'Hide'
     });
     setConfirmAction(() => () => hideConversation(userId));
     setConfirmOpen(true);
@@ -242,7 +242,7 @@ const Sidebar = ({ isOpen, setIsOpen, setView, currentView }) => {
   return (
     <>
       {isOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-40 bg-black/60 lg:hidden animate-fade-in backdrop-blur-sm"
           onClick={() => setIsOpen(false)}
         />
@@ -251,190 +251,190 @@ const Sidebar = ({ isOpen, setIsOpen, setView, currentView }) => {
         ${isOpen ? 'w-[min(360px,85vw)] md:w-80 lg:w-72 translate-x-0 opacity-100' : 'w-0 -translate-x-full lg:translate-x-0 lg:w-0 opacity-0 lg:opacity-0'}
         absolute lg:relative top-0 left-0 flex-shrink-0`}>
 
-      <div className="flex flex-col h-full overflow-hidden" style={sid.container}>
-        <div className="h-[2px] flex-shrink-0" style={{ background: 'linear-gradient(90deg, #6366f1, #2dd4bf, #818cf8)' }} />
+        <div className="flex flex-col h-full overflow-hidden" style={sid.container}>
+          <div className="h-[2px] flex-shrink-0" style={{ background: 'linear-gradient(90deg, #6366f1, #2dd4bf, #818cf8)' }} />
 
-        <div className="p-4 sm:p-5 flex-shrink-0" style={{ borderBottom: '1px solid var(--sidebar-border)' }}>
-          <div className="flex items-center gap-3 mb-4 sm:mb-5">
-            <button onClick={() => setIsOpen(!isOpen)}
-              className="p-2.5 -ml-2 rounded-xl transition-all hover:bg-slate-100 dark:hover:bg-white/5 text-slate-500 hover:text-primary-500 flex items-center justify-center">
-              {isOpen && window.innerWidth < 1024 ? <X size={20} /> : <Menu size={20} />}
-            </button>
-            <div onClick={() => window.location.reload()} className="flex items-center gap-3.5 cursor-pointer group ml-1">
-              <img src={logo} alt="BeatChat" className="h-9 w-auto object-contain transition-all duration-300 group-hover:scale-105"
-                style={{ filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.1))' }} />
-              <span className="text-[22px] font-extrabold font-heading tracking-tight"
-                style={{ color: 'var(--col-text)' }}>
-                BeatChat
-              </span>
+          <div className="p-4 sm:p-5 flex-shrink-0" style={{ borderBottom: '1px solid var(--sidebar-border)' }}>
+            <div className="flex items-center gap-3 mb-4 sm:mb-5">
+              <button onClick={() => setIsOpen(!isOpen)}
+                className="p-2.5 -ml-2 rounded-xl transition-all hover:bg-slate-100 dark:hover:bg-white/5 text-slate-500 hover:text-primary-500 flex items-center justify-center">
+                {isOpen && window.innerWidth < 1024 ? <X size={20} /> : <Menu size={20} />}
+              </button>
+              <div onClick={() => window.location.reload()} className="flex items-center gap-3.5 cursor-pointer group ml-1">
+                <img src={logo} alt="BeatChat" className="h-9 w-auto object-contain transition-all duration-300 group-hover:scale-105"
+                  style={{ filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.1))' }} />
+                <span className="text-[22px] font-extrabold font-heading tracking-tight"
+                  style={{ color: 'var(--col-text)' }}>
+                  BeatChat
+                </span>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="mb-3 px-5">
-          <div className="flex items-center w-full px-4 py-2.5 rounded-full bg-black/5 dark:bg-white/5 border border-transparent dark:border-white/5 shadow-inner transition-all focus-within:bg-white dark:focus-within:bg-white/10 focus-within:shadow-md focus-within:border-primary-500/30">
-            <Search size={14} className="text-slate-400 flex-shrink-0" />
-            <input 
-              id="sidebar-search" 
-              type="text" 
-              placeholder="Search..." 
-              value={searchQuery} 
-              onChange={e => setSearchQuery(e.target.value)}
-              className="flex-1 w-full ml-2.5 text-sm font-medium bg-transparent focus:outline-none text-slate-800 dark:text-slate-200 placeholder:text-slate-500 dark:placeholder:text-slate-600"
-            />
+          <div className="mb-3 px-5">
+            <div className="flex items-center w-full px-4 py-2.5 rounded-full bg-black/5 dark:bg-white/5 border border-transparent dark:border-white/5 shadow-inner transition-all focus-within:bg-white dark:focus-within:bg-white/10 focus-within:shadow-md focus-within:border-primary-500/30">
+              <Search size={14} className="text-slate-400 flex-shrink-0" />
+              <input
+                id="sidebar-search"
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                className="flex-1 w-full ml-2.5 text-sm font-medium bg-transparent focus:outline-none text-slate-800 dark:text-slate-200 placeholder:text-slate-500 dark:placeholder:text-slate-600"
+              />
+            </div>
           </div>
-        </div>
 
-        <div className="px-5 mb-4">
-          <button onClick={() => setShowAddContactModal(true)}
-            className="btn-primary w-full mb-4 group shadow-lg hover:shadow-primary-500/20 relative overflow-hidden">
-            <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            <Plus size={18} className="mr-2" />
-            <span>New Chat</span>
-          </button>
+          <div className="px-5 mb-4">
+            <button onClick={() => setShowAddContactModal(true)}
+              className="btn-primary w-full mb-4 group shadow-lg hover:shadow-primary-500/20 relative overflow-hidden">
+              <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <Plus size={18} className="mr-2" />
+              <span>New Chat</span>
+            </button>
 
-          <div className="flex gap-1.5 p-1 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5">
-            {[{ id: 'chats', icon: MessageSquare, label: 'Chats' }, { id: 'groups', icon: Users, label: 'Groups' }].map(tab => (
-              <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 flex items-center justify-center py-2 rounded-lg text-xs font-bold transition-all duration-200 ${activeTab === tab.id
-                  ? 'bg-white dark:bg-primary-500/20 text-primary-600 dark:text-primary-400 shadow-sm border border-black/5 dark:border-primary-500/20'
-                  : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
-                  }`}>
-                <tab.icon size={13} className="mr-1.5" />{tab.label}
-              </button>
-            ))}
+            <div className="flex gap-1.5 p-1 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5">
+              {[{ id: 'chats', icon: MessageSquare, label: 'Chats' }, { id: 'groups', icon: Users, label: 'Groups' }].map(tab => (
+                <button key={tab.id} onClick={() => setActiveTab(tab.id)}
+                  className={`flex-1 flex items-center justify-center py-2 rounded-lg text-xs font-bold transition-all duration-200 ${activeTab === tab.id
+                    ? 'bg-white dark:bg-primary-500/20 text-primary-600 dark:text-primary-400 shadow-sm border border-black/5 dark:border-primary-500/20'
+                    : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+                    }`}>
+                  <tab.icon size={13} className="mr-1.5" />{tab.label}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
 
-        <div className="flex-1 overflow-y-auto p-2 space-y-0.5 custom-scrollbar">
-          {loading ? (
-            <div className="flex justify-center mt-16"><ClipLoader size={24} color="#8b5cf6" /></div>
-          ) : activeTab === 'chats' ? (
-            displayedUsers.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-40 mt-4">
-                <Search size={18} className="text-primary-500 opacity-50 mb-3" />
-                <p className="text-sm font-medium text-slate-500">No users found</p>
-              </div>
-            ) : displayedUsers.map(u => {
-              const isSelected = currentChat === u._id && currentView === 'chat';
-              const hasUnread = unreadCounts[u._id] > 0;
-              const isOnline = onlineUsers.includes(u._id);
-              return (
-                <div key={u._id} onClick={() => handleUserClick(u)}
-                  onContextMenu={e => { e.preventDefault(); setContextMenu({ x: e.clientX, y: e.clientY, userId: u._id }); }}
-                  className={`relative flex items-center p-3 rounded-xl cursor-pointer transition-all duration-200 ${isSelected ? 'sidebar-item-active shadow-sm' : 'hover:bg-white/5 border-transparent'} group/item`}
-                >
-                  <div className="relative flex-shrink-0">
-                    <img
-                      src={u.avatar
-                        ? (u.avatar.startsWith('http') ? u.avatar : `${import.meta.env.VITE_API_URL}${u.avatar}`)
-                        : `https://ui-avatars.com/api/?name=${encodeURIComponent(u.name)}&background=random`}
-                      alt="avatar"
-                      className="w-12 h-12 rounded-full object-cover shadow-sm transition-transform group-hover/item:scale-105" />
-                    {isOnline && !showBlocked && (
-                      <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 animate-online-pulse"
-                        style={{ background: '#34d399', borderColor: '#111420' }} />
-                    )}
-                  </div>
-                  <div className="ml-3 flex-1 min-w-0">
-                    <div className="flex justify-between items-baseline mb-0.5">
-                      <h3 className={`font-bold text-[15px] truncate ${isSelected ? 'text-white' : 'text-slate-200'}`}>{u.name}</h3>
-                      {u.lastMessage && <span className="text-[10px] text-slate-500 font-medium ml-2">{formatTime(u.lastMessage.timestamp)}</span>}
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <p className={`text-xs truncate max-w-[170px] ${hasUnread ? 'text-slate-100 font-bold' : 'text-slate-500'}`}>
-                        {searchQuery ? (u.email || `@${u.username}`) : (u.lastMessage ? u.lastMessage.text : (isOnline ? 'Online' : (u.lastSeen ? `Last seen ${formatTime(u.lastSeen)}` : 'Offline')))}
-                      </p>
-                      {hasUnread && <span className="unread-badge ml-2">{unreadCounts[u._id]}</span>}
-                    </div>
-                  </div>
+          <div className="flex-1 overflow-y-auto p-2 space-y-0.5 custom-scrollbar">
+            {loading ? (
+              <div className="flex justify-center mt-16"><ClipLoader size={24} color="#8b5cf6" /></div>
+            ) : activeTab === 'chats' ? (
+              displayedUsers.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-40 mt-4">
+                  <Search size={18} className="text-primary-500 opacity-50 mb-3" />
+                  <p className="text-sm font-medium text-slate-500">No users found</p>
                 </div>
-              );
-            })
-          ) : (
-            <div className="space-y-1.5">
-              <button onClick={() => setShowCreateGroup(true)}
-                className="w-full flex items-center p-2.5 rounded-xl transition-all duration-200 border border-dashed border-primary-500/25 hover:border-primary-500/50 text-slate-500 hover:text-primary-300 hover:bg-primary-500/5 group">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center mr-2.5 bg-primary-500/10 border border-primary-500/20">
-                  <Plus size={16} className="text-primary-500" />
-                </div>
-                <span className="font-semibold text-sm">Create New Group</span>
-              </button>
-              <button onClick={() => setShowJoinGroup(true)}
-                className="w-full flex items-center p-2.5 rounded-xl transition-all duration-200 border border-primary-500/15 bg-primary-500/5 text-slate-500 hover:text-primary-300 hover:bg-primary-500/10 group mt-2">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center mr-2.5 bg-cyan-500/10 border border-cyan-500/20">
-                  <Hash size={16} className="text-cyan-500" />
-                </div>
-                <span className="font-semibold text-sm">Join Group by Code</span>
-              </button>
-              {groups.filter(g => g.name.toLowerCase().includes(searchQuery.toLowerCase())).map(group => {
-                const isSelected = currentChat === group._id;
+              ) : displayedUsers.map(u => {
+                const isSelected = currentChat === u._id && currentView === 'chat';
+                const hasUnread = unreadCounts[u._id] > 0;
+                const isOnline = onlineUsers.includes(u._id);
                 return (
-                  <div key={group._id}
-                    onClick={() => { setCurrentChat(group._id); joinGroupRoom(group._id); setView('chat'); if (window.innerWidth < 1024) setIsOpen(false); }}
-                    onContextMenu={e => { e.preventDefault(); setContextMenu({ x: e.clientX, y: e.clientY, groupId: group._id }); }}
-                    className={`flex items-center p-3 rounded-xl cursor-pointer transition-all duration-200 ${isSelected ? 'sidebar-item-active shadow-sm' : 'hover:bg-white/5 border-transparent'} mb-1 group/item`}
+                  <div key={u._id} onClick={() => handleUserClick(u)}
+                    onContextMenu={e => { e.preventDefault(); setContextMenu({ x: e.clientX, y: e.clientY, userId: u._id }); }}
+                    className={`relative flex items-center p-3 rounded-xl cursor-pointer transition-all duration-200 ${isSelected ? 'sidebar-item-active shadow-sm' : 'hover:bg-white/5 border-transparent'} group/item`}
                   >
-                    <div className="w-12 h-12 rounded-full flex items-center justify-center font-bold text-sm overflow-hidden flex-shrink-0 bg-primary-900/20 text-primary-300 border border-primary-500/20 group-hover/item:scale-105 transition-transform">
-                      {group.avatar ? <img src={group.avatar} className="w-full h-full object-cover" alt={group.name} /> : group.name.charAt(0).toUpperCase()}
+                    <div className="relative flex-shrink-0">
+                      <img
+                        src={u.avatar
+                          ? (u.avatar.startsWith('http') ? u.avatar : `${import.meta.env.VITE_API_URL}${u.avatar}`)
+                          : `https://ui-avatars.com/api/?name=${encodeURIComponent(u.name)}&background=random`}
+                        alt="avatar"
+                        className="w-12 h-12 rounded-full object-cover shadow-sm transition-transform group-hover/item:scale-105" />
+                      {isOnline && !showBlocked && (
+                        <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 animate-online-pulse"
+                          style={{ background: '#34d399', borderColor: '#111420' }} />
+                      )}
                     </div>
                     <div className="ml-3 flex-1 min-w-0">
                       <div className="flex justify-between items-baseline mb-0.5">
-                        <h3 className={`font-bold text-[15px] truncate ${isSelected ? 'text-white' : 'text-slate-200'}`}>{group.name}</h3>
-                        {group.lastMessage && <span className="text-[10px] text-slate-500 font-medium ml-2">{formatTime(group.lastMessage.timestamp)}</span>}
+                        <h3 className={`font-bold text-[15px] truncate ${isSelected ? 'text-white' : 'text-slate-200'}`}>{u.name}</h3>
+                        {u.lastMessage && <span className="text-[10px] text-slate-500 font-medium ml-2">{formatTime(u.lastMessage.timestamp)}</span>}
                       </div>
                       <div className="flex justify-between items-center">
-                        <p className={`text-xs truncate max-w-[160px] ${unreadCounts[group._id] > 0 ? 'text-slate-100 font-semibold' : 'text-slate-500'}`}>
-                          {group.lastMessage ? <span><span className="text-primary-400 font-medium">{group.lastMessage.senderName}:</span> {group.lastMessage.text}</span> : `${group.members?.length || 0} members`}
+                        <p className={`text-xs truncate max-w-[170px] ${hasUnread ? 'text-slate-100 font-bold' : 'text-slate-500'}`}>
+                          {searchQuery ? (u.email || `@${u.username}`) : (u.lastMessage ? u.lastMessage.text : (isOnline ? 'Online' : (u.lastSeen ? `Last seen ${formatTime(u.lastSeen)}` : 'Offline')))}
                         </p>
-                        {unreadCounts[group._id] > 0 && <span className="unread-badge ml-2">{unreadCounts[group._id]}</span>}
+                        {hasUnread && <span className="unread-badge ml-2">{unreadCounts[u._id]}</span>}
                       </div>
                     </div>
                   </div>
                 );
-              })}
-            </div>
-          )}
-        </div>
+              })
+            ) : (
+              <div className="space-y-1.5">
+                <button onClick={() => setShowCreateGroup(true)}
+                  className="w-full flex items-center p-2.5 rounded-xl transition-all duration-200 border border-dashed border-primary-500/25 hover:border-primary-500/50 text-slate-500 hover:text-primary-300 hover:bg-primary-500/5 group">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center mr-2.5 bg-primary-500/10 border border-primary-500/20">
+                    <Plus size={16} className="text-primary-500" />
+                  </div>
+                  <span className="font-semibold text-sm">Create New Group</span>
+                </button>
+                <button onClick={() => setShowJoinGroup(true)}
+                  className="w-full flex items-center p-2.5 rounded-xl transition-all duration-200 border border-primary-500/15 bg-primary-500/5 text-slate-500 hover:text-primary-300 hover:bg-primary-500/10 group mt-2">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center mr-2.5 bg-cyan-500/10 border border-cyan-500/20">
+                    <Hash size={16} className="text-cyan-500" />
+                  </div>
+                  <span className="font-semibold text-sm">Join Group by Code</span>
+                </button>
+                {groups.filter(g => g.name.toLowerCase().includes(searchQuery.toLowerCase())).map(group => {
+                  const isSelected = currentChat === group._id;
+                  return (
+                    <div key={group._id}
+                      onClick={() => { setCurrentChat(group._id); joinGroupRoom(group._id); setView('chat'); if (window.innerWidth < 1024) setIsOpen(false); }}
+                      onContextMenu={e => { e.preventDefault(); setContextMenu({ x: e.clientX, y: e.clientY, groupId: group._id }); }}
+                      className={`flex items-center p-3 rounded-xl cursor-pointer transition-all duration-200 ${isSelected ? 'sidebar-item-active shadow-sm' : 'hover:bg-white/5 border-transparent'} mb-1 group/item`}
+                    >
+                      <div className="w-12 h-12 rounded-full flex items-center justify-center font-bold text-sm overflow-hidden flex-shrink-0 bg-primary-900/20 text-primary-300 border border-primary-500/20 group-hover/item:scale-105 transition-transform">
+                        {group.avatar ? <img src={group.avatar} className="w-full h-full object-cover" alt={group.name} /> : group.name.charAt(0).toUpperCase()}
+                      </div>
+                      <div className="ml-3 flex-1 min-w-0">
+                        <div className="flex justify-between items-baseline mb-0.5">
+                          <h3 className={`font-bold text-[15px] truncate ${isSelected ? 'text-white' : 'text-slate-200'}`}>{group.name}</h3>
+                          {group.lastMessage && <span className="text-[10px] text-slate-500 font-medium ml-2">{formatTime(group.lastMessage.timestamp)}</span>}
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <p className={`text-xs truncate max-w-[160px] ${unreadCounts[group._id] > 0 ? 'text-slate-100 font-semibold' : 'text-slate-500'}`}>
+                            {group.lastMessage ? <span><span className="text-primary-400 font-medium">{group.lastMessage.senderName}:</span> {group.lastMessage.text}</span> : `${group.members?.length || 0} members`}
+                          </p>
+                          {unreadCounts[group._id] > 0 && <span className="unread-badge ml-2">{unreadCounts[group._id]}</span>}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
 
-        <div className="p-3 flex-shrink-0 border-t border-slate-200 dark:border-white/5 bg-slate-100 dark:bg-black/20">
-          <div onClick={() => { setView('profile'); if (window.innerWidth < 768) setIsOpen(false); }}
-            className={`flex items-center justify-between p-2.5 rounded-xl cursor-pointer transition-all duration-300 group ${currentView === 'profile' ? 'bg-white dark:bg-primary-500/10 shadow-sm border border-slate-200 dark:border-primary-500/20' : 'hover:bg-white dark:hover:bg-white/5 border border-transparent'}`}>
-            <div className="flex items-center gap-2.5 flex-1 min-w-0">
-              <div className="relative flex-shrink-0">
-                <img src={user?.avatar || `https://ui-avatars.com/api/?name=${user?.name}&background=random`} alt="Me"
-                  className="w-9 h-9 rounded-full object-cover" style={{ boxShadow: '0 0 0 2px rgba(139,92,246,0.4)' }} />
-                <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full border-2 bg-emerald-400 border-[#0a0118]" />
+          <div className="p-3 flex-shrink-0 border-t border-slate-200 dark:border-white/5 bg-slate-100 dark:bg-black/20">
+            <div onClick={() => { setView('profile'); if (window.innerWidth < 768) setIsOpen(false); }}
+              className={`flex items-center justify-between p-2.5 rounded-xl cursor-pointer transition-all duration-300 group ${currentView === 'profile' ? 'bg-white dark:bg-primary-500/10 shadow-sm border border-slate-200 dark:border-primary-500/20' : 'hover:bg-white dark:hover:bg-white/5 border border-transparent'}`}>
+              <div className="flex items-center gap-2.5 flex-1 min-w-0">
+                <div className="relative flex-shrink-0">
+                  <img src={user?.avatar || `https://ui-avatars.com/api/?name=${user?.name}&background=random`} alt="Me"
+                    className="w-9 h-9 rounded-full object-cover" style={{ boxShadow: '0 0 0 2px rgba(139,92,246,0.4)' }} />
+                  <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full border-2 bg-emerald-400 border-[#0a0118]" />
+                </div>
+                <div className="min-w-0 pr-2">
+                  <p className="text-sm font-bold text-slate-200 group-hover:text-primary-300 transition-colors truncate">{user?.name}</p>
+                  <p className="text-[10px] text-slate-600 uppercase tracking-wider truncate">My Account</p>
+                </div>
               </div>
-              <div className="min-w-0 pr-2">
-                <p className="text-sm font-bold text-slate-200 group-hover:text-primary-300 transition-colors truncate">{user?.name}</p>
-                <p className="text-[10px] text-slate-600 uppercase tracking-wider truncate">My Account</p>
+              <div className="flex items-center gap-1">
+                <button onClick={e => {
+                  e.stopPropagation();
+                  const html = document.documentElement;
+                  const goingLight = html.classList.contains('dark');
+                  html.classList.toggle('dark', !goingLight);
+                  html.classList.toggle('light', goingLight);
+                  localStorage.setItem('theme', goingLight ? 'light' : 'dark');
+                  setIsDarkMode(!goingLight);
+                }} className="p-1.5 rounded-lg text-slate-500 hover:text-primary-500 hover:bg-slate-100 dark:hover:bg-white/5 transition-all">
+                  {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
+                </button>
+                <button onClick={e => {
+                  e.stopPropagation();
+                  setConfirmData({ title: 'Log Out', message: 'Are you sure you want to log out?', isDanger: false, confirmText: 'Log Out' });
+                  setConfirmAction(() => () => logout());
+                  setConfirmOpen(true);
+                }} className="p-1.5 rounded-lg text-slate-500 hover:text-error hover:bg-error/10 transition-all">
+                  <LogOut size={18} />
+                </button>
               </div>
-            </div>
-            <div className="flex items-center gap-1">
-              <button onClick={e => {
-                e.stopPropagation();
-                const html = document.documentElement;
-                const goingLight = html.classList.contains('dark');
-                html.classList.toggle('dark', !goingLight);
-                html.classList.toggle('light', goingLight);
-                localStorage.setItem('theme', goingLight ? 'light' : 'dark');
-                setIsDarkMode(!goingLight);
-              }} className="p-1.5 rounded-lg text-slate-500 hover:text-primary-500 hover:bg-slate-100 dark:hover:bg-white/5 transition-all">
-                {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
-              </button>
-              <button onClick={e => {
-                e.stopPropagation();
-                setConfirmData({ title: 'Log Out', message: 'Are you sure you want to log out?', isDanger: false, confirmText: 'Log Out' });
-                setConfirmAction(() => () => logout());
-                setConfirmOpen(true);
-              }} className="p-1.5 rounded-lg text-slate-500 hover:text-error hover:bg-error/10 transition-all">
-                <LogOut size={18} />
-              </button>
             </div>
           </div>
         </div>
-      </div>
       </aside>
 
       {createPortal(
@@ -488,17 +488,21 @@ const Sidebar = ({ isOpen, setIsOpen, setView, currentView }) => {
                   { label: 'Copy Group Code', icon: Hash, action: () => { navigator.clipboard.writeText(group.groupCode); toast.success('Code copied!'); } },
                   ...(isAdmin ? [
                     { label: 'Group Settings', icon: Shield, action: () => { setSelectedGroup(group); setShowGroupSettings(true); } },
-                    { label: 'Delete Group', icon: Trash2, danger: true, action: () => {
-                      setConfirmData({ title: 'Delete Group', message: `Are you sure you want to delete "${group.name}"?`, isDanger: true, confirmText: 'Delete' });
-                      setConfirmAction(() => () => deleteGroup(group._id));
-                      setConfirmOpen(true);
-                    }}
+                    {
+                      label: 'Delete Group', icon: Trash2, danger: true, action: () => {
+                        setConfirmData({ title: 'Delete Group', message: `Are you sure you want to delete "${group.name}"?`, isDanger: true, confirmText: 'Delete' });
+                        setConfirmAction(() => () => deleteGroup(group._id));
+                        setConfirmOpen(true);
+                      }
+                    }
                   ] : [
-                    { label: 'Leave Group', icon: LogOut, danger: true, action: () => {
-                      setConfirmData({ title: 'Leave Group', message: `Are you sure you want to leave "${group.name}"?`, isDanger: true, confirmText: 'Leave' });
-                      setConfirmAction(() => () => leaveGroup(group._id));
-                      setConfirmOpen(true);
-                    }}
+                    {
+                      label: 'Leave Group', icon: LogOut, danger: true, action: () => {
+                        setConfirmData({ title: 'Leave Group', message: `Are you sure you want to leave "${group.name}"?`, isDanger: true, confirmText: 'Leave' });
+                        setConfirmAction(() => () => leaveGroup(group._id));
+                        setConfirmOpen(true);
+                      }
+                    }
                   ])
                 ].map((item, i) => (
                   <button key={i} onClick={() => { item.action(); setContextMenu(null); }}

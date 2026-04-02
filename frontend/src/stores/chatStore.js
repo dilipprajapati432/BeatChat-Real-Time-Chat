@@ -247,6 +247,11 @@ const useChatStore = create((set, get) => ({
         setUser({ ...user, deletedChats: newDeletedChats });
       }
 
+      if (user?.hiddenChats?.some(id => id.toString() === newMessage.senderId?.toString())) {
+        const newHiddenChats = user.hiddenChats.filter(id => id.toString() !== newMessage.senderId?.toString());
+        setUser({ ...user, hiddenChats: newHiddenChats });
+      }
+
       if (currentChat === newMessage.senderId) {
         set({ messages: [...messages, newMessage] });
         newSocket.emit('markSeen', { senderId: newMessage.senderId });
@@ -467,6 +472,9 @@ const useChatStore = create((set, get) => ({
     const { user: authUser, setUser } = useAuthStore.getState();
     if (type === 'direct' && authUser?.deletedChats?.some(dc => dc.partnerId?.toString() === currentChat?.toString())) {
       setUser({ ...authUser, deletedChats: authUser.deletedChats.filter(dc => dc.partnerId?.toString() !== currentChat?.toString()) });
+    }
+    if (type === 'direct' && authUser?.hiddenChats?.some(id => id.toString() === currentChat?.toString())) {
+      setUser({ ...authUser, hiddenChats: authUser.hiddenChats.filter(id => id.toString() !== currentChat?.toString()) });
     }
     if (type === 'direct' && !users.find(u => u._id?.toString() === currentChat?.toString())) {
       try {

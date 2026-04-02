@@ -199,10 +199,10 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
     if (selectedIds.size === 0) return;
     try {
       const token = useAuthStore.getState().token;
-      
+
       toast.promise(
-        axios.post(`${import.meta.env.VITE_API_URL}/api/messages/batch-delete`, 
-          { ids: Array.from(selectedIds) }, 
+        axios.post(`${import.meta.env.VITE_API_URL}/api/messages/batch-delete`,
+          { ids: Array.from(selectedIds) },
           { headers: { Authorization: `Bearer ${token}` } }
         ),
         {
@@ -567,7 +567,7 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
     try {
       setMessages(prev => prev.map(m => m._id === editingMessageId ? { ...m, text: text, isEdited: true } : m));
       socket.emit('editMessage', { messageId: editingMessageId, newText: text });
-      
+
       setEditingMessageId(null);
       setText('');
       toast.success("Message updated");
@@ -604,13 +604,13 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
       const type = isGroup ? 'group' : 'direct';
       const targetId = currentChat;
       const token = useAuthStore.getState().token;
-      
+
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/export/${targetId}`, {
         params: { type },
         headers: { Authorization: `Bearer ${token}` },
         responseType: 'blob'
       });
-      
+
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
@@ -630,7 +630,7 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
       {/* Decorative localized glows */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary-600/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-600/10 rounded-full blur-[120px] pointer-events-none" />
-      
+
       <div className="relative z-10 flex flex-col items-center text-center max-w-md px-6 animate-slideUp">
         <div className="relative mb-8 group">
           <div className="absolute inset-0 rounded-full bg-primary-500 blur-[40px] opacity-20 group-hover:opacity-30 transition-opacity animate-pulse" />
@@ -646,7 +646,7 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
           Connect with friends and colleagues in real-time. Select a conversation to start chatting.
         </p>
 
-        <button 
+        <button
           onClick={() => setIsSidebarOpen(true)}
           className="btn-primary group !px-8 !py-4"
         >
@@ -655,21 +655,21 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
         </button>
 
         <div className="mt-16 flex items-center gap-6 opacity-40 grayscale group-hover:grayscale-0 transition-all duration-700">
-           <div className="flex flex-col items-center">
-             <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/5 flex items-center justify-center mb-1"><Shield size={14} className="text-primary-400" /></div>
-             <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Secure</span>
-           </div>
-           <div className="flex flex-col items-center">
-             <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/5 flex items-center justify-center mb-1"><Zap size={14} className="text-yellow-400" /></div>
-             <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Fast</span>
-           </div>
-           <div className="flex flex-col items-center">
-             <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/5 flex items-center justify-center mb-1"><Globe size={14} className="text-cyan-400" /></div>
-             <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Global</span>
-           </div>
+          <div className="flex flex-col items-center">
+            <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/5 flex items-center justify-center mb-1"><Shield size={14} className="text-primary-400" /></div>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Secure</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/5 flex items-center justify-center mb-1"><Zap size={14} className="text-yellow-400" /></div>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Fast</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/5 flex items-center justify-center mb-1"><Globe size={14} className="text-cyan-400" /></div>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Global</span>
+          </div>
         </div>
       </div>
-      
+
       <div className="absolute bottom-8 text-slate-600 text-[11px] font-bold uppercase tracking-[0.2em] opacity-40">
         End-to-End Encrypted
       </div>
@@ -678,13 +678,13 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
 
   return (
     <div className={`flex-1 flex flex-col min-w-0 h-full bg-white dark:bg-[#09090b] relative overflow-hidden transition-all duration-300 ${isSidebarOpen ? 'md:ml-0' : ''}`}>
-      
+
       {/* Selection Mode Header Overlay */}
       {selectionMode && (
         <div className="absolute top-0 left-0 right-0 z-[100] bg-[#0c0c14]/95 backdrop-blur-2xl border-b border-primary-500/20 flex items-center justify-between px-4 sm:px-6 py-3 animate-slideDown shadow-2xl shadow-primary-900/20">
           <div className="flex items-center gap-3">
-            <button 
-              onClick={() => { setSelectionMode(false); setSelectedIds(new Set()); }} 
+            <button
+              onClick={() => { setSelectionMode(false); setSelectedIds(new Set()); }}
               className="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-slate-300 hover:text-white transition-all duration-200 border border-white/5"
             >
               <X size={18} />
@@ -700,7 +700,7 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
           </div>
           {selectedIds.size > 0 && (
             <div className="flex items-center gap-1.5 animate-scale-in">
-              <button 
+              <button
                 onClick={handleBatchDelete}
                 className="h-9 px-4 rounded-xl bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white font-bold text-[13px] transition-all duration-200 flex items-center gap-2 border border-rose-500/15 hover:border-rose-500 hover:shadow-lg hover:shadow-rose-500/25"
                 title="Delete messages"
@@ -715,253 +715,253 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
 
       {/* Header */}
       <div className="z-30 bg-chat-header-bg border-b border-chat-header-border shadow-sm shadow-black/20 sticky top-0 px-2.5 sm:px-4 md:px-6 py-2.5 sm:py-3.5 flex items-center justify-between transition-all duration-300">
-          <div className="flex items-center gap-4">
-            {!isSidebarOpen && (
-              <div className="flex items-center animate-fadeIn group/sidebar-toggle">
-                <button
-                  onClick={() => setIsSidebarOpen(true)}
-                  className="relative p-2 sm:p-2.5 rounded-2xl flex items-center justify-center transition-all duration-500 overflow-hidden
+        <div className="flex items-center gap-4">
+          {!isSidebarOpen && (
+            <div className="flex items-center animate-fadeIn group/sidebar-toggle">
+              <button
+                onClick={() => setIsSidebarOpen(true)}
+                className="relative p-2 sm:p-2.5 rounded-2xl flex items-center justify-center transition-all duration-500 overflow-hidden
                     bg-white/5 dark:bg-white/[0.03] border border-white/10 dark:border-white/[0.05] hover:bg-white/10 dark:hover:bg-white/[0.08] hover:border-primary-500/30 hover:shadow-lg hover:shadow-primary-500/5 group"
-                  title="Open Conversations"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-tr from-primary-500/10 via-transparent to-indigo-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                  <Menu size={20} className="text-slate-400 group-hover:text-primary-400 transition-all duration-500 relative z-10 group-hover:scale-110" />
-                </button>
-              </div>
-            )}
+                title="Open Conversations"
+              >
+                <div className="absolute inset-0 bg-gradient-to-tr from-primary-500/10 via-transparent to-indigo-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <Menu size={20} className="text-slate-400 group-hover:text-primary-400 transition-all duration-500 relative z-10 group-hover:scale-110" />
+              </button>
+            </div>
+          )}
 
-            {isGroup ? (
-              <div className="flex items-center cursor-pointer group" onClick={() => setShowMembersModal(true)}>
-                <div className="w-11 h-11 rounded-full bg-primary-600/20 flex items-center justify-center text-primary-400 font-bold border border-primary-500/20 overflow-hidden shadow-lg shadow-primary-900/10">
-                  {currentGroup.avatar ? (
-                    <img src={currentGroup.avatar} className="w-full h-full object-cover" alt={groupName} />
-                  ) : groupName.charAt(0).toUpperCase()}
-                </div>
-                <div className="ml-3">
-                  <h3 className="font-bold text-white text-[15px] leading-tight group-hover:text-primary-400 transition-colors">{groupName}</h3>
-                  <p className="text-[11px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">
-                    {currentGroup.members?.length} members
-                  </p>
-                </div>
+          {isGroup ? (
+            <div className="flex items-center cursor-pointer group" onClick={() => setShowMembersModal(true)}>
+              <div className="w-11 h-11 rounded-full bg-primary-600/20 flex items-center justify-center text-primary-400 font-bold border border-primary-500/20 overflow-hidden shadow-lg shadow-primary-900/10">
+                {currentGroup.avatar ? (
+                  <img src={currentGroup.avatar} className="w-full h-full object-cover" alt={groupName} />
+                ) : groupName.charAt(0).toUpperCase()}
               </div>
-            ) : (
-              (() => {
-                const receiver = useChatStore.getState().users.find(u => u._id === currentChat) || { name: 'Chat' };
-                const isOnline = useChatStore.getState().onlineUsers.includes(receiver._id);
-                
-                const formatLastSeen = (dateString) => {
-                  if (!dateString) return 'Offline';
-                  const date = new Date(dateString);
-                  if (isNaN(date.getTime())) return 'Offline';
-                  const now = new Date();
-                  const isToday = date.toDateString() === now.toDateString();
-                  const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                  return isToday ? `Last seen today at ${timeStr}` : `Last seen ${date.toLocaleDateString()} ${timeStr}`;
-                };
+              <div className="ml-3">
+                <h3 className="font-bold text-white text-[15px] leading-tight group-hover:text-primary-400 transition-colors">{groupName}</h3>
+                <p className="text-[11px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">
+                  {currentGroup.members?.length} members
+                </p>
+              </div>
+            </div>
+          ) : (
+            (() => {
+              const receiver = useChatStore.getState().users.find(u => u._id === currentChat) || { name: 'Chat' };
+              const isOnline = useChatStore.getState().onlineUsers.includes(receiver._id);
 
-                return (
-                  <div className="flex items-center cursor-pointer group" onClick={() => setProfileModalOpen(true)}>
-                    <div className="relative">
-                      <img 
-                        src={receiver.avatar ? (receiver.avatar.startsWith('http') ? receiver.avatar : `${import.meta.env.VITE_API_URL}${receiver.avatar}`) : `https://ui-avatars.com/api/?name=${encodeURIComponent(receiver.name)}&background=random`}
-                        className="w-11 h-11 rounded-full object-cover border border-white/10 shadow-lg group-hover:scale-105 transition-transform"
-                        alt={receiver.name}
-                      />
-                      {isOnline && (
-                        <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 rounded-full border-2 border-[#09090b] animate-online-pulse" />
+              const formatLastSeen = (dateString) => {
+                if (!dateString) return 'Offline';
+                const date = new Date(dateString);
+                if (isNaN(date.getTime())) return 'Offline';
+                const now = new Date();
+                const isToday = date.toDateString() === now.toDateString();
+                const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                return isToday ? `Last seen today at ${timeStr}` : `Last seen ${date.toLocaleDateString()} ${timeStr}`;
+              };
+
+              return (
+                <div className="flex items-center cursor-pointer group" onClick={() => setProfileModalOpen(true)}>
+                  <div className="relative">
+                    <img
+                      src={receiver.avatar ? (receiver.avatar.startsWith('http') ? receiver.avatar : `${import.meta.env.VITE_API_URL}${receiver.avatar}`) : `https://ui-avatars.com/api/?name=${encodeURIComponent(receiver.name)}&background=random`}
+                      className="w-11 h-11 rounded-full object-cover border border-white/10 shadow-lg group-hover:scale-105 transition-transform"
+                      alt={receiver.name}
+                    />
+                    {isOnline && (
+                      <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 rounded-full border-2 border-[#09090b] animate-online-pulse" />
+                    )}
+                  </div>
+                  <div className="ml-3">
+                    <h3 className="font-bold text-white text-[15px] leading-tight">{receiver.name}</h3>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      {typing ? (
+                        <span className="text-[10px] text-primary-400 animate-pulse font-bold uppercase tracking-widest">Typing...</span>
+                      ) : (
+                        <p className={`text-[11px] font-bold uppercase tracking-wider ${isOnline ? 'text-emerald-500' : 'text-slate-500'}`}>
+                          {isOnline ? 'Active Now' : formatLastSeen(lastSeenMap[receiver._id] || receiver.lastSeen)}
+                        </p>
+                      )}
+                      {isBlocked && (
+                        <span className="text-[9px] bg-rose-500/20 text-rose-500 px-1.5 py-0.5 rounded font-bold uppercase tracking-tighter">Blocked</span>
                       )}
                     </div>
-                    <div className="ml-3">
-                      <h3 className="font-bold text-white text-[15px] leading-tight">{receiver.name}</h3>
-                      <div className="flex items-center gap-2 mt-0.5">
-                        {typing ? (
-                          <span className="text-[10px] text-primary-400 animate-pulse font-bold uppercase tracking-widest">Typing...</span>
-                        ) : (
-                          <p className={`text-[11px] font-bold uppercase tracking-wider ${isOnline ? 'text-emerald-500' : 'text-slate-500'}`}>
-                            {isOnline ? 'Active Now' : formatLastSeen(lastSeenMap[receiver._id] || receiver.lastSeen)}
-                          </p>
-                        )}
-                        {isBlocked && (
-                          <span className="text-[9px] bg-rose-500/20 text-rose-500 px-1.5 py-0.5 rounded font-bold uppercase tracking-tighter">Blocked</span>
-                        )}
-                      </div>
-                    </div>
                   </div>
-                );
-              })()
-            )}
-          </div>
+                </div>
+              );
+            })()
+          )}
+        </div>
 
-          <div className="flex items-center gap-1.5 md:gap-3">
-            <button 
-              onClick={() => toast.error('Calling feature coming soon 🚀', { icon: '📞' })}
-              className="p-2.5 rounded-xl hover:bg-white/5 text-slate-400 hover:text-white transition-all hidden sm:block"
+        <div className="flex items-center gap-1.5 md:gap-3">
+          <button
+            onClick={() => toast.error('Calling feature coming soon 🚀', { icon: '📞' })}
+            className="p-2.5 rounded-xl hover:bg-white/5 text-slate-400 hover:text-white transition-all hidden sm:block"
+          >
+            <Phone size={20} />
+          </button>
+          <button
+            onClick={() => toast.error('Video calling coming soon 🚀', { icon: '📹' })}
+            className="p-2.5 rounded-xl hover:bg-white/5 text-slate-400 hover:text-white transition-all hidden sm:block"
+          >
+            <Video size={20} />
+          </button>
+          <div className="w-[1px] h-6 bg-white/10 mx-1 hidden sm:block" />
+
+          <div className="relative">
+            <button
+              onClick={() => setShowMenu(!showMenu)}
+              className={`p-2.5 rounded-xl hover:bg-white/5 text-slate-400 hover:text-white transition-all ${showMenu ? 'bg-white/5 text-white' : ''}`}
             >
-              <Phone size={20} />
+              <MoreVertical size={20} />
             </button>
-            <button 
-              onClick={() => toast.error('Video calling coming soon 🚀', { icon: '📹' })}
-              className="p-2.5 rounded-xl hover:bg-white/5 text-slate-400 hover:text-white transition-all hidden sm:block"
-            >
-              <Video size={20} />
-            </button>
-            <div className="w-[1px] h-6 bg-white/10 mx-1 hidden sm:block" />
-            
-            <div className="relative">
-              <button 
-                onClick={() => setShowMenu(!showMenu)} 
-                className={`p-2.5 rounded-xl hover:bg-white/5 text-slate-400 hover:text-white transition-all ${showMenu ? 'bg-white/5 text-white' : ''}`}
-              >
-                <MoreVertical size={20} />
-              </button>
-              {showMenu && (
-                <>
-                  <div className="fixed inset-0 z-[40]" onClick={() => setShowMenu(false)} />
-                  <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-[#16161e] rounded-2xl shadow-2xl border border-slate-200 dark:border-white/5 py-2 z-50 animate-scale-in origin-top-right overflow-hidden">
-                    {isGroup ? (
-                      <>
-                        <button
-                          onClick={() => { setShowMembersModal(true); setShowMenu(false); }}
-                          className="w-full text-left px-4 py-3 text-[13px] font-bold text-slate-300 hover:bg-white/5 flex items-center gap-3 transition-colors"
-                        >
-                          <Users size={16} className="text-primary-400" />
-                          Group Info
-                        </button>
-                        <button
-                          onClick={() => { setShowAddMemberModal(true); setShowMenu(false); }}
-                          className="w-full text-left px-4 py-3 text-[13px] font-bold text-slate-300 hover:bg-white/5 flex items-center gap-3 transition-colors"
-                        >
-                          <UserPlus size={16} className="text-emerald-400" />
-                          Add Member
-                        </button>
-                        <button
-                          onClick={copyGroupCode}
-                          className="w-full text-left px-4 py-3 text-[13px] font-bold text-slate-300 hover:bg-white/5 flex items-center gap-3 transition-colors"
-                        >
-                          <Copy size={16} className="text-amber-400" />
-                          Copy Code
-                        </button>
+            {showMenu && (
+              <>
+                <div className="fixed inset-0 z-[40]" onClick={() => setShowMenu(false)} />
+                <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-[#16161e] rounded-2xl shadow-2xl border border-slate-200 dark:border-white/5 py-2 z-50 animate-scale-in origin-top-right overflow-hidden">
+                  {isGroup ? (
+                    <>
+                      <button
+                        onClick={() => { setShowMembersModal(true); setShowMenu(false); }}
+                        className="w-full text-left px-4 py-3 text-[13px] font-bold text-slate-300 hover:bg-white/5 flex items-center gap-3 transition-colors"
+                      >
+                        <Users size={16} className="text-primary-400" />
+                        Group Info
+                      </button>
+                      <button
+                        onClick={() => { setShowAddMemberModal(true); setShowMenu(false); }}
+                        className="w-full text-left px-4 py-3 text-[13px] font-bold text-slate-300 hover:bg-white/5 flex items-center gap-3 transition-colors"
+                      >
+                        <UserPlus size={16} className="text-emerald-400" />
+                        Add Member
+                      </button>
+                      <button
+                        onClick={copyGroupCode}
+                        className="w-full text-left px-4 py-3 text-[13px] font-bold text-slate-300 hover:bg-white/5 flex items-center gap-3 transition-colors"
+                      >
+                        <Copy size={16} className="text-amber-400" />
+                        Copy Code
+                      </button>
 
-                        <div className="my-1 border-t border-white/5"></div>
+                      <div className="my-1 border-t border-white/5"></div>
 
-                        {(currentGroup?.admin?._id === (user?._id || user?.id) || currentGroup?.admin === (user?._id || user?.id)) ? (
-                          <>
-                            <button
-                              onClick={() => { setShowGroupSettings(true); setShowMenu(false); }}
-                              className="w-full text-left px-4 py-3 text-[13px] font-bold text-slate-300 hover:bg-white/5 flex items-center gap-3 transition-colors"
-                            >
-                              <Shield size={16} className="text-indigo-400" />
-                              Settings
-                            </button>
-                            <button
-                              onClick={handleDeleteGroupClick}
-                              className="w-full text-left px-4 py-3 text-[13px] font-bold text-rose-400 hover:bg-rose-500/10 flex items-center gap-3 transition-colors"
-                            >
-                              <Trash2 size={16} />
-                              Delete Group
-                            </button>
-                          </>
-                        ) : (
+                      {(currentGroup?.admin?._id === (user?._id || user?.id) || currentGroup?.admin === (user?._id || user?.id)) ? (
+                        <>
                           <button
-                            onClick={handleLeaveGroupClick}
+                            onClick={() => { setShowGroupSettings(true); setShowMenu(false); }}
+                            className="w-full text-left px-4 py-3 text-[13px] font-bold text-slate-300 hover:bg-white/5 flex items-center gap-3 transition-colors"
+                          >
+                            <Shield size={16} className="text-indigo-400" />
+                            Settings
+                          </button>
+                          <button
+                            onClick={handleDeleteGroupClick}
                             className="w-full text-left px-4 py-3 text-[13px] font-bold text-rose-400 hover:bg-rose-500/10 flex items-center gap-3 transition-colors"
                           >
-                            <LogOut size={16} />
-                            Leave Group
+                            <Trash2 size={16} />
+                            Delete Group
                           </button>
-                        )}
-                        <div className="my-1 border-t border-white/5"></div>
+                        </>
+                      ) : (
                         <button
-                          onClick={handleExportChat}
-                          className="w-full text-left px-4 py-3 text-[13px] font-bold text-slate-300 hover:bg-white/5 flex items-center gap-3 transition-colors"
-                        >
-                          <Download size={16} className="text-indigo-400" />
-                          Export Chat
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button
-                          onClick={handleBlockToggle}
-                          className="w-full text-left px-4 py-3 text-[13px] font-bold text-slate-300 hover:bg-white/5 flex items-center gap-3 transition-colors"
-                        >
-                          {isBlocked ? <ShieldCheck size={16} className="text-emerald-400" /> : <UserX size={16} className="text-rose-400" />}
-                          {isBlocked ? 'Unblock' : 'Block'}
-                        </button>
-                        <button
-                          onClick={handleReportUser}
-                          className="w-full text-left px-4 py-3 text-[13px] font-bold text-slate-300 hover:bg-white/5 flex items-center gap-3 transition-colors"
-                        >
-                          <ShieldAlert size={16} className="text-amber-400" />
-                          Report
-                        </button>
-                        <button
-                          onClick={handleExportChat}
-                          className="w-full text-left px-4 py-3 text-[13px] font-bold text-slate-300 hover:bg-white/5 flex items-center gap-3 transition-colors"
-                        >
-                          <Download size={16} className="text-indigo-400" />
-                          Export Chat
-                        </button>
-                        <div className="my-1 border-t border-white/5"></div>
-                        <button
-                          onClick={handleDeleteChat}
+                          onClick={handleLeaveGroupClick}
                           className="w-full text-left px-4 py-3 text-[13px] font-bold text-rose-400 hover:bg-rose-500/10 flex items-center gap-3 transition-colors"
                         >
-                          <Trash2 size={16} />
-                          Delete Chat
+                          <LogOut size={16} />
+                          Leave Group
                         </button>
-                      </>
-                    )}
+                      )}
+                      <div className="my-1 border-t border-white/5"></div>
+                      <button
+                        onClick={handleExportChat}
+                        className="w-full text-left px-4 py-3 text-[13px] font-bold text-slate-300 hover:bg-white/5 flex items-center gap-3 transition-colors"
+                      >
+                        <Download size={16} className="text-indigo-400" />
+                        Export Chat
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        onClick={handleBlockToggle}
+                        className="w-full text-left px-4 py-3 text-[13px] font-bold text-slate-300 hover:bg-white/5 flex items-center gap-3 transition-colors"
+                      >
+                        {isBlocked ? <ShieldCheck size={16} className="text-emerald-400" /> : <UserX size={16} className="text-rose-400" />}
+                        {isBlocked ? 'Unblock' : 'Block'}
+                      </button>
+                      <button
+                        onClick={handleReportUser}
+                        className="w-full text-left px-4 py-3 text-[13px] font-bold text-slate-300 hover:bg-white/5 flex items-center gap-3 transition-colors"
+                      >
+                        <ShieldAlert size={16} className="text-amber-400" />
+                        Report
+                      </button>
+                      <button
+                        onClick={handleExportChat}
+                        className="w-full text-left px-4 py-3 text-[13px] font-bold text-slate-300 hover:bg-white/5 flex items-center gap-3 transition-colors"
+                      >
+                        <Download size={16} className="text-indigo-400" />
+                        Export Chat
+                      </button>
+                      <div className="my-1 border-t border-white/5"></div>
+                      <button
+                        onClick={handleDeleteChat}
+                        className="w-full text-left px-4 py-3 text-[13px] font-bold text-rose-400 hover:bg-rose-500/10 flex items-center gap-3 transition-colors"
+                      >
+                        <Trash2 size={16} />
+                        Delete Chat
+                      </button>
+                    </>
+                  )}
 
-                    <div className="my-1 border-t border-white/5"></div>
-                    <button
-                      onClick={handleClearChat}
-                      className="w-full text-left px-4 py-3 text-[13px] font-bold text-rose-400 hover:bg-rose-500/10 flex items-center gap-3 transition-colors"
-                    >
-                      <Trash2 size={16} />
-                      Clear History
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
+                  <div className="my-1 border-t border-white/5"></div>
+                  <button
+                    onClick={handleClearChat}
+                    className="w-full text-left px-4 py-3 text-[13px] font-bold text-rose-400 hover:bg-rose-500/10 flex items-center gap-3 transition-colors"
+                  >
+                    <Trash2 size={16} />
+                    Clear History
+                  </button>
+                </div>
+              </>
+            )}
           </div>
+        </div>
       </div>
 
-            <Suspense fallback={null}>
-              {createPortal(
-                <>
-                  <ConfirmModal
-                    isOpen={confirmOpen}
-                    onClose={() => setConfirmOpen(false)}
-                    onConfirm={() => {
-                      if (confirmAction) confirmAction();
-                      setConfirmOpen(false);
-                    }}
-                    title={confirmData.title}
-                    message={confirmData.message}
-                    confirmText={confirmData.confirmText}
-                    isDanger={confirmData.isDanger}
-                  />
-                  {showAddMemberModal && (
-                    <AddMemberModal groupId={currentChat} onClose={() => setShowAddMemberModal(false)} />
-                  )}
-                  {showGroupSettings && (
-                    <GroupSettingsModal
-                      group={currentGroup}
-                      onClose={() => setShowGroupSettings(false)}
-                    />
-                  )}
-                  {showMembersModal && (
-                    <GroupMembersModal
-                      group={currentGroup}
-                      onClose={() => setShowMembersModal(false)}
-                    />
-                  )}
-                </>,
-                document.body
-              )}
-            </Suspense>
+      <Suspense fallback={null}>
+        {createPortal(
+          <>
+            <ConfirmModal
+              isOpen={confirmOpen}
+              onClose={() => setConfirmOpen(false)}
+              onConfirm={() => {
+                if (confirmAction) confirmAction();
+                setConfirmOpen(false);
+              }}
+              title={confirmData.title}
+              message={confirmData.message}
+              confirmText={confirmData.confirmText}
+              isDanger={confirmData.isDanger}
+            />
+            {showAddMemberModal && (
+              <AddMemberModal groupId={currentChat} onClose={() => setShowAddMemberModal(false)} />
+            )}
+            {showGroupSettings && (
+              <GroupSettingsModal
+                group={currentGroup}
+                onClose={() => setShowGroupSettings(false)}
+              />
+            )}
+            {showMembersModal && (
+              <GroupMembersModal
+                group={currentGroup}
+                onClose={() => setShowMembersModal(false)}
+              />
+            )}
+          </>,
+          document.body
+        )}
+      </Suspense>
 
       {/* Pinned Messages Banner */}
       <PinnedMessages messages={messages} onScrollToMessage={scrollToMessage} />
@@ -1069,218 +1069,218 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
       <div className="absolute bottom-4 sm:bottom-6 left-0 right-0 pointer-events-none z-[40] transition-all duration-300 flex justify-center">
         <div className="w-full relative px-2 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1400px] pointer-events-none">
           <div className="w-full pointer-events-auto">
-          {/* Emoji/GIF Pickers - Improved styling */}
-          {showEmojiPicker && (
-            <Suspense fallback={<div className="absolute bottom-full mb-4 h-[350px] w-full sm:w-[350px] flex items-center justify-center bg-white dark:bg-[#16161e] rounded-3xl border border-slate-200 dark:border-white/5 shadow-2xl pointer-events-auto"><ClipLoader color="#6366f1" /></div>}>
-              <div className="absolute bottom-full mb-4 shadow-2xl rounded-3xl border border-slate-200 dark:border-white/5 bg-white dark:bg-[#16161e] overflow-hidden animate-scale-in origin-bottom-left w-full sm:w-[350px] pointer-events-auto">
-                <EmojiPicker onEmojiClick={onEmojiClick} theme="dark" height={350} width="100%" />
-                <div onClick={() => setShowEmojiPicker(false)} className="fixed inset-0 -z-10" />
-              </div>
-            </Suspense>
-          )}
-          
-          {showGifPicker && (
-            <Suspense fallback={<div className="absolute bottom-full mb-4 h-[350px] w-full sm:w-[320px] flex items-center justify-center bg-white dark:bg-[#16161e] rounded-3xl border border-slate-200 dark:border-white/5 shadow-2xl pointer-events-auto"><ClipLoader color="#6366f1" /></div>}>
-              <div className="absolute bottom-full mb-4 shadow-2xl rounded-3xl overflow-hidden animate-scale-in origin-bottom-left border border-white/5 w-full sm:w-[320px] pointer-events-auto">
-                <GifPicker onSelect={onGifSelect} onClose={() => setShowGifPicker(false)} />
-                <div onClick={() => setShowGifPicker(false)} className="fixed inset-0 -z-10 pointer-events-none" />
-              </div>
-            </Suspense>
-          )}
-
-          {/* @Mention Dropdown */}
-          {mentionQuery !== null && (
-            <MentionDropdown
-              query={mentionQuery}
-              users={users}
-              groups={groups}
-              currentChat={currentChat}
-              isGroup={isGroup}
-              onSelect={handleMentionSelect}
-              inputRef={textInputRef}
-            />
-          )}
-
-          {/* Smart Reply Suggestions */}
-          <SmartReplies
-            messages={messages}
-            user={user}
-            onSend={handleSmartReply}
-            isBlocked={isBlocked}
-            inputText={text}
-          />
-
-          <form onSubmit={handleSend} className="relative flex items-end gap-3 w-full mx-auto z-10 pointer-events-auto">
-            {/* Input Bar Island */}
-            <div className={`flex-1 flex flex-col bg-white/90 dark:bg-[#0f0f12]/90 backdrop-blur-xl rounded-[28px] p-2 transition-all duration-300 shadow-2xl border ${isFocused ? 'ring-2 ring-primary-500/30 border-primary-500/40' : 'border-slate-200 dark:border-white/5'} ${isBlocked ? 'opacity-50 cursor-not-allowed' : ''}`}>
-              
-              {/* Reply/Edit Context Preview */}
-              {(replyingTo || editingMessageId) && (
-                <div className={`mx-2 mb-2 p-3 bg-black/5 dark:bg-white/5 rounded-2xl border-l-4 ${editingMessageId ? 'border-amber-500' : 'border-primary-500'} flex items-start gap-3 animate-premium-pop relative group/reply-prev`}>
-                  <div className="flex-1 min-w-0">
-                    <p className={`text-[11px] font-black uppercase tracking-widest mb-0.5 ${editingMessageId ? 'text-amber-500' : 'text-primary-400'}`}>
-                      {editingMessageId ? 'Editing Message' : (String(replyingTo?.senderId?._id || replyingTo?.senderId || '') === String(user?._id || user?.id) ? 'You' : (replyingTo?.senderId?.name || 'User'))}
-                    </p>
-                    <p className="text-sm text-slate-500 dark:text-slate-300 truncate">
-                      {editingMessageId ? messages.find(m => m._id === editingMessageId)?.text || '...' : replyingTo?.text}
-                    </p>
-                  </div>
-                  <button 
-                    type="button" 
-                    onClick={() => editingMessageId ? cancelEditing() : setReplyingTo(null)}
-                    className="p-1.5 rounded-full hover:bg-black/10 dark:hover:bg-white/10 text-slate-400 transition-colors"
-                  >
-                    <X size={14} strokeWidth={3} />
-                  </button>
+            {/* Emoji/GIF Pickers - Improved styling */}
+            {showEmojiPicker && (
+              <Suspense fallback={<div className="absolute bottom-full mb-4 h-[350px] w-full sm:w-[350px] flex items-center justify-center bg-white dark:bg-[#16161e] rounded-3xl border border-slate-200 dark:border-white/5 shadow-2xl pointer-events-auto"><ClipLoader color="#6366f1" /></div>}>
+                <div className="absolute bottom-full mb-4 shadow-2xl rounded-3xl border border-slate-200 dark:border-white/5 bg-white dark:bg-[#16161e] overflow-hidden animate-scale-in origin-bottom-left w-full sm:w-[350px] pointer-events-auto">
+                  <EmojiPicker onEmojiClick={onEmojiClick} theme="dark" height={350} width="100%" />
+                  <div onClick={() => setShowEmojiPicker(false)} className="fixed inset-0 -z-10" />
                 </div>
-              )}
+              </Suspense>
+            )}
 
-              <div className="flex items-end">
+            {showGifPicker && (
+              <Suspense fallback={<div className="absolute bottom-full mb-4 h-[350px] w-full sm:w-[320px] flex items-center justify-center bg-white dark:bg-[#16161e] rounded-3xl border border-slate-200 dark:border-white/5 shadow-2xl pointer-events-auto"><ClipLoader color="#6366f1" /></div>}>
+                <div className="absolute bottom-full mb-4 shadow-2xl rounded-3xl overflow-hidden animate-scale-in origin-bottom-left border border-white/5 w-full sm:w-[320px] pointer-events-auto">
+                  <GifPicker onSelect={onGifSelect} onClose={() => setShowGifPicker(false)} />
+                  <div onClick={() => setShowGifPicker(false)} className="fixed inset-0 -z-10 pointer-events-none" />
+                </div>
+              </Suspense>
+            )}
 
-              {/* Media Attach Button */}
-              <div className="flex-shrink-0 flex items-center gap-1 pl-1">
-                <label className={`p-2.5 rounded-full hover:bg-white/5 text-slate-400 hover:text-white transition-all duration-200 cursor-pointer ${isBlocked || isSending ? 'opacity-50 pointer-events-none' : ''}`}>
-                  <input
-                    ref={docInputRef}
-                    type="file"
-                    accept=".pdf,.doc,.docx,.txt"
-                    onChange={(e) => e.target.files[0] && setImage(e.target.files[0])}
-                    className="hidden"
-                    disabled={isBlocked || isSending}
-                  />
-                  <Paperclip size={20} className="transform rotate-45" />
-                </label>
-                <label className={`p-2.5 rounded-full hover:bg-white/5 text-slate-400 hover:text-white transition-all duration-200 cursor-pointer hidden sm:flex ${isBlocked || isSending ? 'opacity-50 pointer-events-none' : ''}`}>
-                  <input
-                    ref={imgInputRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => e.target.files[0] && setImage(e.target.files[0])}
-                    className="hidden"
-                    disabled={isBlocked || isSending}
-                  />
-                  <ImageIcon size={20} />
-                </label>
-              </div>
+            {/* @Mention Dropdown */}
+            {mentionQuery !== null && (
+              <MentionDropdown
+                query={mentionQuery}
+                users={users}
+                groups={groups}
+                currentChat={currentChat}
+                isGroup={isGroup}
+                onSelect={handleMentionSelect}
+                inputRef={textInputRef}
+              />
+            )}
 
-              {/* Text Input */}
-              <div className="flex-1 min-w-0 relative mx-1">
-                {image && (
-                  <div className="absolute bottom-full left-0 mb-4 bg-white dark:bg-[#16161e] p-2.5 rounded-2xl flex items-center gap-3 text-sm border border-slate-200 dark:border-white/5 shadow-2xl backdrop-blur-xl z-40 animate-slideUp">
-                    <div className="w-8 h-8 rounded-lg bg-primary-500/20 flex items-center justify-center"><Paperclip size={14} className="text-primary-400" /></div>
-                    <span className="font-bold text-slate-200 truncate max-w-[180px]">{image.name}</span>
-                    <button type="button" onClick={() => setImage(null)} className="text-slate-500 hover:text-rose-500 transition-colors bg-white/5 rounded-full p-1.5"><X size={14} /></button>
+            {/* Smart Reply Suggestions */}
+            <SmartReplies
+              messages={messages}
+              user={user}
+              onSend={handleSmartReply}
+              isBlocked={isBlocked}
+              inputText={text}
+            />
+
+            <form onSubmit={handleSend} className="relative flex items-end gap-3 w-full mx-auto z-10 pointer-events-auto">
+              {/* Input Bar Island */}
+              <div className={`flex-1 flex flex-col bg-white/90 dark:bg-[#0f0f12]/90 backdrop-blur-xl rounded-[28px] p-2 transition-all duration-300 shadow-2xl border ${isFocused ? 'ring-2 ring-primary-500/30 border-primary-500/40' : 'border-slate-200 dark:border-white/5'} ${isBlocked ? 'opacity-50 cursor-not-allowed' : ''}`}>
+
+                {/* Reply/Edit Context Preview */}
+                {(replyingTo || editingMessageId) && (
+                  <div className={`mx-2 mb-2 p-3 bg-black/5 dark:bg-white/5 rounded-2xl border-l-4 ${editingMessageId ? 'border-amber-500' : 'border-primary-500'} flex items-start gap-3 animate-premium-pop relative group/reply-prev`}>
+                    <div className="flex-1 min-w-0">
+                      <p className={`text-[11px] font-black uppercase tracking-widest mb-0.5 ${editingMessageId ? 'text-amber-500' : 'text-primary-400'}`}>
+                        {editingMessageId ? 'Editing Message' : (String(replyingTo?.senderId?._id || replyingTo?.senderId || '') === String(user?._id || user?.id) ? 'You' : (replyingTo?.senderId?.name || 'User'))}
+                      </p>
+                      <p className="text-sm text-slate-500 dark:text-slate-300 truncate">
+                        {editingMessageId ? messages.find(m => m._id === editingMessageId)?.text || '...' : replyingTo?.text}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => editingMessageId ? cancelEditing() : setReplyingTo(null)}
+                      className="p-1.5 rounded-full hover:bg-black/10 dark:hover:bg-white/10 text-slate-400 transition-colors"
+                    >
+                      <X size={14} strokeWidth={3} />
+                    </button>
                   </div>
                 )}
-                <input
-                  ref={textInputRef}
-                  type="text"
-                  value={text}
-                  onChange={handleTyping}
-                  onFocus={() => setIsFocused(true)}
-                  onBlur={() => { setIsFocused(false); setTimeout(() => setMentionQuery(null), 200); }}
-                  placeholder={isBlocked ? "You have blocked this user" : "Write something..."}
-                  disabled={isBlocked || isSending}
-                  className="w-full bg-transparent border-0 py-3.5 px-3 focus:outline-none focus:ring-0 focus:border-none text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium disabled:opacity-50 text-[15px]"
-                />
-              </div>
 
-              {/* Emoji & GIF Toggles */}
-              <div className="flex items-center gap-1 pr-1">
-                <button
-                  type="button"
-                  onClick={() => { setShowEmojiPicker(!showEmojiPicker); setShowGifPicker(false); }}
-                  className={`p-2.5 rounded-full hover:bg-white/5 text-slate-400 hover:text-yellow-400 transition-all duration-200 ${isBlocked ? 'opacity-50' : ''}`}
-                >
-                  <Smile size={22} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => { setShowGifPicker(!showGifPicker); setShowEmojiPicker(false); }}
-                  className={`px-3 py-1.5 rounded-xl hover:bg-white/5 text-slate-500 hover:text-white transition-all duration-200 font-black text-[10px] tracking-widest hidden sm:block border border-transparent hover:border-white/5`}
-                >
-                  GIF
-                </button>
-              </div>
-            </div>
-          </div>
+                <div className="flex items-end">
 
-            {/* Send Button */}
-            <button
-              type="submit"
-              disabled={(!text.trim() && !image) || isBlocked || isSending}
-              className={`flex-shrink-0 w-[48px] h-[48px] sm:w-[54px] sm:h-[54px] rounded-full transition-all duration-300 transform active:scale-95 flex items-center justify-center shadow-lg group/send ${(!text.trim() && !image) || isBlocked ? 'bg-white/5 text-slate-600 cursor-not-allowed shadow-none' : 'bg-primary-600 hover:bg-primary-500 text-white shadow-primary-500/20'}`}
-            >
-              {isSending ? (
-                <ClipLoader size={20} color="#fff" />
-              ) : (
-                <Send size={20} className={`transition-transform duration-500 ${(!text.trim() && !image) ? '' : 'group-hover/send:translate-x-0.5 group-hover/send:-translate-y-0.5 group-hover/send:scale-110'}`} />
-              )}
-            </button>
-          </form>
+                  {/* Media Attach Button */}
+                  <div className="flex-shrink-0 flex items-center gap-1 pl-1">
+                    <label className={`p-2.5 rounded-full hover:bg-white/5 text-slate-400 hover:text-white transition-all duration-200 cursor-pointer ${isBlocked || isSending ? 'opacity-50 pointer-events-none' : ''}`}>
+                      <input
+                        ref={docInputRef}
+                        type="file"
+                        accept=".pdf,.doc,.docx,.txt"
+                        onChange={(e) => e.target.files[0] && setImage(e.target.files[0])}
+                        className="hidden"
+                        disabled={isBlocked || isSending}
+                      />
+                      <Paperclip size={20} className="transform rotate-45" />
+                    </label>
+                    <label className={`p-2.5 rounded-full hover:bg-white/5 text-slate-400 hover:text-white transition-all duration-200 cursor-pointer flex ${isBlocked || isSending ? 'opacity-50 pointer-events-none' : ''}`}>
+                      <input
+                        ref={imgInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => e.target.files[0] && setImage(e.target.files[0])}
+                        className="hidden"
+                        disabled={isBlocked || isSending}
+                      />
+                      <ImageIcon size={20} />
+                    </label>
+                  </div>
 
-          {/* Delete Message Modal */}
-          {deleteModalOpen && selectedMessageForDelete && (
-            <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in pointer-events-auto">
-              <div className="rounded-2xl p-6 max-w-sm w-full shadow-2xl animate-scale-in bg-white dark:bg-[#1a1d27] border border-slate-200 dark:border-error/25">
-                <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-2">Delete Message?</h3>
-                <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">
-                  Choose how you want to delete this message.
-                </p>
-                <div className="flex flex-col space-y-3">
-                  {canDeleteForEveryone(selectedMessageForDelete) && (
+                  {/* Text Input */}
+                  <div className="flex-1 min-w-0 relative mx-1">
+                    {image && (
+                      <div className="absolute bottom-full left-0 mb-4 bg-white dark:bg-[#16161e] p-2.5 rounded-2xl flex items-center gap-3 text-sm border border-slate-200 dark:border-white/5 shadow-2xl backdrop-blur-xl z-40 animate-slideUp">
+                        <div className="w-8 h-8 rounded-lg bg-primary-500/20 flex items-center justify-center"><Paperclip size={14} className="text-primary-400" /></div>
+                        <span className="font-bold text-slate-200 truncate max-w-[180px]">{image.name}</span>
+                        <button type="button" onClick={() => setImage(null)} className="text-slate-500 hover:text-rose-500 transition-colors bg-white/5 rounded-full p-1.5"><X size={14} /></button>
+                      </div>
+                    )}
+                    <input
+                      ref={textInputRef}
+                      type="text"
+                      value={text}
+                      onChange={handleTyping}
+                      onFocus={() => setIsFocused(true)}
+                      onBlur={() => { setIsFocused(false); setTimeout(() => setMentionQuery(null), 200); }}
+                      placeholder={isBlocked ? "You have blocked this user" : "Write something..."}
+                      disabled={isBlocked || isSending}
+                      className="w-full bg-transparent border-0 py-3.5 px-3 focus:outline-none focus:ring-0 focus:border-none text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium disabled:opacity-50 text-[15px]"
+                    />
+                  </div>
+
+                  {/* Emoji & GIF Toggles */}
+                  <div className="flex items-center gap-1 pr-1">
                     <button
-                      onClick={() => confirmDelete('everyone')}
-                      className="w-full py-3 px-4 rounded-xl transition font-bold text-sm text-white flex items-center justify-center"
-                      style={{ background: 'linear-gradient(135deg,#dc2626,#b91c1c)', boxShadow: '0 0 15px rgba(239,68,68,0.3)' }}
+                      type="button"
+                      onClick={() => { setShowEmojiPicker(!showEmojiPicker); setShowGifPicker(false); }}
+                      className={`p-2.5 rounded-full hover:bg-white/5 text-slate-400 hover:text-yellow-400 transition-all duration-200 ${isBlocked ? 'opacity-50' : ''}`}
                     >
-                      <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                      Delete for Everyone
+                      <Smile size={22} />
                     </button>
-                  )}
-                  <button
-                    onClick={() => confirmDelete('me')}
-                    className="w-full py-3 px-4 rounded-xl transition font-bold text-sm text-slate-700 dark:text-slate-300 flex items-center justify-center bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200 dark:border-white/5"
-                  >
-                    Delete for Me Only
-                  </button>
-                  <button
-                    onClick={() => { setDeleteModalOpen(false); setSelectedMessageForDelete(null); }}
-                    className="w-full py-3 px-4 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition font-medium text-sm"
-                  >
-                    Cancel
-                  </button>
+                    <button
+                      type="button"
+                      onClick={() => { setShowGifPicker(!showGifPicker); setShowEmojiPicker(false); }}
+                      className={`px-3 py-1.5 rounded-xl hover:bg-white/5 text-slate-500 hover:text-white transition-all duration-200 font-black text-[10px] tracking-widest hidden sm:block border border-transparent hover:border-white/5`}
+                    >
+                      GIF
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
 
-          <Suspense fallback={null}>
-            <ReportModal
-              isOpen={reportModalOpen}
-              onClose={() => setReportModalOpen(false)}
-              reportedUserId={currentChat}
-              reportedMessageId={reportMessageId}
-            />
-          </Suspense>
+              {/* Send Button */}
+              <button
+                type="submit"
+                disabled={(!text.trim() && !image) || isBlocked || isSending}
+                className={`flex-shrink-0 w-[48px] h-[48px] sm:w-[54px] sm:h-[54px] rounded-full transition-all duration-300 transform active:scale-95 flex items-center justify-center shadow-lg group/send ${(!text.trim() && !image) || isBlocked ? 'bg-white/5 text-slate-600 cursor-not-allowed shadow-none' : 'bg-primary-600 hover:bg-primary-500 text-white shadow-primary-500/20'}`}
+              >
+                {isSending ? (
+                  <ClipLoader size={20} color="#fff" />
+                ) : (
+                  <Send size={20} className={`transition-transform duration-500 ${(!text.trim() && !image) ? '' : 'group-hover/send:translate-x-0.5 group-hover/send:-translate-y-0.5 group-hover/send:scale-110'}`} />
+                )}
+              </button>
+            </form>
 
-          {profileModalOpen && (
+            {/* Delete Message Modal */}
+            {deleteModalOpen && selectedMessageForDelete && (
+              <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in pointer-events-auto">
+                <div className="rounded-2xl p-6 max-w-sm w-full shadow-2xl animate-scale-in bg-white dark:bg-[#1a1d27] border border-slate-200 dark:border-error/25">
+                  <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-2">Delete Message?</h3>
+                  <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">
+                    Choose how you want to delete this message.
+                  </p>
+                  <div className="flex flex-col space-y-3">
+                    {canDeleteForEveryone(selectedMessageForDelete) && (
+                      <button
+                        onClick={() => confirmDelete('everyone')}
+                        className="w-full py-3 px-4 rounded-xl transition font-bold text-sm text-white flex items-center justify-center"
+                        style={{ background: 'linear-gradient(135deg,#dc2626,#b91c1c)', boxShadow: '0 0 15px rgba(239,68,68,0.3)' }}
+                      >
+                        <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                        Delete for Everyone
+                      </button>
+                    )}
+                    <button
+                      onClick={() => confirmDelete('me')}
+                      className="w-full py-3 px-4 rounded-xl transition font-bold text-sm text-slate-700 dark:text-slate-300 flex items-center justify-center bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200 dark:border-white/5"
+                    >
+                      Delete for Me Only
+                    </button>
+                    <button
+                      onClick={() => { setDeleteModalOpen(false); setSelectedMessageForDelete(null); }}
+                      className="w-full py-3 px-4 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition font-medium text-sm"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <Suspense fallback={null}>
-              <UserProfileModal
-                userId={currentChat}
-                onClose={() => setProfileModalOpen(false)}
+              <ReportModal
+                isOpen={reportModalOpen}
+                onClose={() => setReportModalOpen(false)}
+                reportedUserId={currentChat}
+                reportedMessageId={reportMessageId}
               />
             </Suspense>
-          )}
 
-          {showSharedMedia && (
-            <Suspense fallback={<div className="fixed inset-y-0 right-0 w-80 bg-white dark:bg-slate-900 shadow-2xl z-40 flex items-center justify-center"><ClipLoader color="#9333ea" /></div>}>
-              <SharedMedia
-                messages={messages}
-                onClose={() => setShowSharedMedia(false)}
-              />
-            </Suspense>
-          )}
+            {profileModalOpen && (
+              <Suspense fallback={null}>
+                <UserProfileModal
+                  userId={currentChat}
+                  onClose={() => setProfileModalOpen(false)}
+                />
+              </Suspense>
+            )}
+
+            {showSharedMedia && (
+              <Suspense fallback={<div className="fixed inset-y-0 right-0 w-80 bg-white dark:bg-slate-900 shadow-2xl z-40 flex items-center justify-center"><ClipLoader color="#9333ea" /></div>}>
+                <SharedMedia
+                  messages={messages}
+                  onClose={() => setShowSharedMedia(false)}
+                />
+              </Suspense>
+            )}
           </div>
         </div>
       </div>

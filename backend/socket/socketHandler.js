@@ -165,16 +165,30 @@ export default (io) => {
           await message.save();
           await message.populate('senderId', 'name username avatar');
 
-          // UNDELETE LOGIC
+          // UNDELETE & UNHIDE LOGIC
           const sender = await User.findById(userId);
+          let senderChanged = false;
+          let receiverChanged = false;
+
           if (sender.deletedChats.some(dc => dc.partnerId?.toString() === to.toString())) {
             sender.deletedChats = sender.deletedChats.filter(dc => dc.partnerId?.toString() !== to.toString());
-            await sender.save();
+            senderChanged = true;
           }
+          if (sender.hiddenChats.includes(to)) {
+            sender.hiddenChats = sender.hiddenChats.filter(id => id?.toString() !== to.toString());
+            senderChanged = true;
+          }
+          if (senderChanged) await sender.save();
+
           if (receiver.deletedChats.some(dc => dc.partnerId?.toString() === userId.toString())) {
             receiver.deletedChats = receiver.deletedChats.filter(dc => dc.partnerId?.toString() !== userId.toString());
-            await receiver.save();
+            receiverChanged = true;
           }
+          if (receiver.hiddenChats.includes(userId)) {
+            receiver.hiddenChats = receiver.hiddenChats.filter(id => id?.toString() !== userId.toString());
+            receiverChanged = true;
+          }
+          if (receiverChanged) await receiver.save();
 
           if (receiverSocket && !isBlocked) {
             io.to(receiverSocket).emit('message', {
