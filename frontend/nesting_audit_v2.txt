@@ -1,0 +1,100 @@
+ 439: L 1 | <div className="flex-1 flex flex-col items-center justify-center bg-gradient-to-br from-slate-50 to-purple-50/60 dark:from-slate-900 dark:to-purple-950/20 p-8 relative overflow-hidden">
+ 444: L 2 | <div className="relative z-10 flex flex-col items-center text-center max-w-sm">
+ 446: L 3 | <div className="relative mb-6 animate-float">
+ 458: L 4 | <div className="hidden w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 to-fuchsia-600 items-center justify-center shadow-lg">
+ 462: L 3 | </div>
+ 463: L 2 | </div>
+ 483: L 1 | </div>
+ 484: L 0 | </div>
+ 488: L 1 | <div className="flex flex-col h-full" style={{ background: 'var(--chat-body-bg)' }}>
+ 489: L 2 | <div className="p-4 backdrop-blur-md flex justify-between items-center shadow-sm z-10"
+ 491: L 3 | <div className="flex items-center gap-3">
+ 504: L 4 | <div className="flex items-center cursor-pointer group/header" onClick={() => setShowMembersModal(true)}>
+ 505: L 5 | <div className="relative transition ml-2">
+ 506: L 6 | <div className="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-600 dark:text-primary-300 font-bold border border-slate-200 dark:border-slate-700 overflow-hidden">
+ 517: L 5 | </div>
+ 518: L 4 | </div>
+ 519: L 5 | <div className="cursor-pointer hover:opacity-80 transition ml-3 flex flex-col justify-center">
+ 521: L 6 | <div className="flex items-center gap-1.5 opacity-60">
+ 526: L 5 | </div>
+ 527: L 4 | </div>
+ 528: L 3 | </div>
+ 534: L 4 | <>
+ 535: L 5 | <div
+ 548: L 4 | </div>
+ 549: L 5 | <div
+ 554: L 6 | <div className="flex items-center space-x-2">
+ 563: L 5 | </div>
+ 564: L 4 | </div>
+ 565: L 3 | </>
+ 567: L 4 | <div className="ml-1">
+ 570: L 3 | </div>
+ 573: L 2 | </div>
+ 576: L 3 | <div className="relative flex items-center gap-1">
+ 585: L 4 | <div className="relative">
+ 590: L 5 | <>
+ 592: L 6 | <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-900 rounded-xl shadow-premium border border-slate-100 dark:border-slate-800 py-2 z-50 animate-scale-in origin-top-right">
+ 594: L 7 | <>
+ 618: L 7 | <div className="my-1 border-t border-slate-100 dark:border-slate-800"></div>
+ 622: L 8 | <>
+ 637: L 7 | </>
+ 647: L 6 | </>
+ 649: L 7 | <>
+ 664: L 7 | <div className="my-1 border-t border-slate-100 dark:border-slate-800"></div>
+ 672: L 6 | </>
+ 675: L 6 | <div className="my-1 border-t border-slate-100 dark:border-slate-800"></div>
+ 683: L 5 | </div>
+ 684: L 4 | </>
+ 686: L 3 | </div>
+ 718: L 2 | </div>
+ 719: L 1 | </div>
+ 722: L 2 | <div
+ 731: L 1 | <div className="flex justify-center items-center h-full"><ClipLoader color="#6366f1" /></div>
+ 733: L 2 | <div className="flex justify-center items-center h-full">
+ 735: L 1 | </div>
+ 737: L 2 | <div className="px-4 py-3 pb-8 flex flex-col w-full min-h-full">
+ 751: L 3 | <div key={msg._id || index}>
+ 753: L 4 | <div className="flex justify-center my-6">
+ 754: L 5 | <div className="px-4 py-1 rounded-full bg-slate-800/40 border border-white/5 backdrop-blur-sm shadow-sm">
+ 756: L 4 | </div>
+ 757: L 3 | </div>
+ 777: L 2 | </div>
+ 782: L 3 | <div className="flex items-start gap-2.5 mb-4 animate-fade-in pl-1">
+ 783: L 4 | <div className="w-8 h-8 rounded-full bg-slate-800/50 flex items-center justify-center border border-white/5">
+ 784: L 5 | <div className="flex gap-1">
+ 788: L 4 | </div>
+ 789: L 3 | </div>
+ 790: L 4 | <div className="bg-slate-800/40 backdrop-blur-md border border-white/5 px-3 py-1.5 rounded-2xl rounded-tl-none">
+ 792: L 3 | </div>
+ 793: L 2 | </div>
+ 795: L 1 | </div>
+ 797: L 0 | </div>
+ 800: L 1 | <div className="p-4 relative" style={{ background: 'var(--chat-input-bg)', borderTop: '1px solid var(--chat-input-border)' }}>
+ 801: L 2 | <div className="absolute bottom-full left-0 right-0 z-10 px-4 pb-2">
+ 804: L 1 | <Suspense fallback={<div className="h-[350px] flex items-center justify-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800"><ClipLoader color="#9333ea" /></div>}>
+ 805: L 2 | <div className="mb-2 shadow-2xl rounded-2xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden animate-scale-in origin-bottom-left">
+ 808: L 1 | </div>
+ 812: L 0 | <Suspense fallback={<div className="h-96 w-80 flex items-center justify-center bg-white dark:bg-slate-900 rounded-2xl"><ClipLoader color="#9333ea" /></div>}>
+ 813: L 1 | <div className="mb-2 shadow-2xl rounded-2xl overflow-hidden animate-scale-in origin-bottom-left">
+ 816: L 0 | </div>
+ 819: L-1 | </div>
+ 822: L 0 | <div className="flex-1 rounded-[28px] p-2 flex items-center shadow-inner ring-1 ring-transparent focus-within:ring-violet-500/30 transition-shadow"
+ 826: L 1 | <div className="flex items-center gap-1 pl-2">
+ 850: L 0 | </div>
+ 852: L 0 | <div className="w-px h-6 bg-slate-300 dark:bg-slate-700 mx-1"></div>
+ 855: L 1 | <div className="flex-1 min-w-0 relative">
+ 857: L 2 | <div className="absolute bottom-full left-0 mb-3 bg-primary-50 dark:bg-primary-900/40 p-2 rounded-lg flex items-center gap-2 text-xs border border-primary-100 dark:border-primary-800 animate-fade-in shadow-sm">
+ 860: L 1 | </div>
+ 870: L 0 | </div>
+ 873: L 1 | <div className="flex items-center gap-1 mr-1">
+ 888: L 0 | </div>
+ 889: L-1 | </div>
+ 904: L-2 | </div>
+ 908: L-1 | <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
+ 909: L 0 | <div className="rounded-2xl p-6 max-w-sm w-full shadow-2xl animate-scale-in"
+ 915: L 1 | <div className="flex flex-col space-y-3">
+ 941: L 0 | </div>
+ 942: L-1 | </div>
+ 943: L-2 | </div>
+ 965: L-3 | <Suspense fallback={<div className="fixed inset-y-0 right-0 w-80 bg-white dark:bg-slate-900 shadow-2xl z-40 flex items-center justify-center"><ClipLoader color="#9333ea" /></div>}>
+ 972: L-4 | </div>

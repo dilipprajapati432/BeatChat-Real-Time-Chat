@@ -1,0 +1,341 @@
+﻿diff --git a/frontend/src/components/ChatWindow.jsx b/frontend/src/components/ChatWindow.jsx
+index af3d78f..d514606 100644
+--- a/frontend/src/components/ChatWindow.jsx
++++ b/frontend/src/components/ChatWindow.jsx
+@@ -55,10 +55,17 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
+   const [reportMessageId, setReportMessageId] = useState(null);
+   const [isFocused, setIsFocused] = useState(false);
+   const [mentionQuery, setMentionQuery] = useState(null);
++  const [activeActionId, setActiveActionId] = useState(null);
+   // Confirm Modal State
+   const [confirmOpen, setConfirmOpen] = useState(false);
+   const [confirmAction, setConfirmAction] = useState(null);
+   const [confirmData, setConfirmData] = useState({ title: '', message: '', isDanger: false });
++  // Unified Action States
++  const [replyingTo, setReplyingTo] = useState(null);
++  const [editingMessageId, setEditingMessageId] = useState(null);
++  const [selectionMode, setSelectionMode] = useState(false);
++  const [selectedIds, setSelectedIds] = useState(new Set());
++  const [starredIds, setStarredIds] = useState(new Set());
+ 
+   const messagesEndRef = useRef(null);
+   const scrollContainerRef = useRef(null);
+@@ -96,6 +103,12 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
+       }).then(res => {
+         if (Array.isArray(res.data)) {
+           setMessages(res.data);
++          // Set starred messages from data
++          const myId = String(user?._id || user?.id);
++          const starredSet = new Set(
++            res.data.filter(m => m.starredBy?.includes(myId)).map(m => m._id)
++          );
++          setStarredIds(starredSet);
+         } else {
+           setMessages([]);
+         }
+@@ -124,11 +137,39 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
+         }
+       };
+       socket.on('typing', handleTyping);
++
++      socket.on('messageStarred', ({ messageId, starredBy }) => {
++        const myId = String(user?._id || user?.id);
++        setStarredIds(prev => {
++          const next = new Set(prev);
++          if (starredBy.includes(myId)) next.add(messageId);
++          else next.delete(messageId);
++          return next;
++        });
++      });
++
++      socket.on('messagePinned', ({ messageId, isPinned }) => {
++        setMessages(prev => prev.map(m => m._id === messageId ? { ...m, isPinned } : m));
++      });
++
+       return () => {
+         socket.off('typing', handleTyping);
++        socket.off('messageStarred');
++        socket.off('messagePinned');
+       };
+     }
+-  }, [socket, currentChat]);
++  }, [currentChat, socket]);
++
++  // Global click listener to close floating message actions
++  useEffect(() => {
++    const handleGlobalClick = (e) => {
++      // Don't clear if we're interacting with a message hub or bubble
++      if (e.target.closest('[id^="msg-"]') || e.target.closest('.glass-premium')) return;
++      if (activeActionId) setActiveActionId(null);
++    };
++    window.addEventListener('mousedown', handleGlobalClick);
++    return () => window.removeEventListener('mousedown', handleGlobalClick);
++  }, [activeActionId]);
+ 
+   // Jump instantly to bottom when switching chats (after messages load)
+   useEffect(() => {
+@@ -146,6 +187,38 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [messages.length]);
+ 
++  const toggleSelectMessage = (id) => {
++    const newSelected = new Set(selectedIds);
++    if (newSelected.has(id)) newSelected.delete(id);
++    else newSelected.add(id);
++    setSelectedIds(newSelected);
++  };
++
++  const handleBatchDelete = async () => {
++    if (selectedIds.size === 0) return;
++    try {
++      const token = useAuthStore.getState().token;
++      
++      toast.promise(
++        axios.post(`${import.meta.env.VITE_API_URL}/api/messages/batch-delete`, 
++          { ids: Array.from(selectedIds) }, 
++          { headers: { Authorization: `Bearer ${token}` } }
++        ),
++        {
++          loading: 'Deleting messages...',
++          success: 'Messages deleted successfully',
++          error: 'Failed to delete some messages'
++        }
++      );
++      setSelectionMode(false);
++      setSelectedIds(new Set());
++      // Optimistic cache update would be better here, but fetch works safely
++      setTimeout(() => fetchMessages(currentChat), 500);
++    } catch (err) {
++      console.error(err);
++    }
++  };
++
+   const clearChat = async () => {
+     try {
+       const token = useAuthStore.getState().token;
+@@ -311,6 +384,13 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
+     if (isBlocked) return toast.error('You have blocked this user. Unblock to send message.');
+ 
+     setIsSending(true);
++
++    if (editingMessageId) {
++      await submitEdit();
++      setIsSending(false);
++      return;
++    }
++
+     let fileUrl = null;
+     try {
+       if (image) {
+@@ -326,16 +406,17 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
+ 
+       // Send text message if exists
+       if (text.trim()) {
+-        sendMessage(text, isGroup ? 'group' : 'direct');
++        sendMessage(text, isGroup ? 'group' : 'direct', replyingTo?._id);
+       }
+ 
+       // Send file message if exists
+       if (fileUrl) {
+-        sendMessage(fileUrl, isGroup ? 'group' : 'direct');
++        sendMessage(fileUrl, isGroup ? 'group' : 'direct', replyingTo?._id);
+       }
+ 
+       setText('');
+       setImage(null);
++      setReplyingTo(null);
+       if (imgInputRef.current) imgInputRef.current.value = "";
+       if (docInputRef.current) docInputRef.current.value = "";
+       setShowEmojiPicker(false);
+@@ -348,6 +429,7 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
+     }
+   };
+ 
++
+   const handleTyping = (e) => {
+     const val = e.target.value;
+     setText(val);
+@@ -375,6 +457,10 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
+     if (socket) socket.emit('pinMessage', { messageId });
+   };
+ 
++  const handleStar = (messageId) => {
++    if (socket) socket.emit('starMessage', { messageId });
++  };
++
+   const scrollToMessage = (messageId) => {
+     const el = document.getElementById(`msg-${messageId}`);
+     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+@@ -396,10 +482,6 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
+     setShowGifPicker(false);
+   };
+ 
+-  // Edit Message State
+-  const [editingMessageId, setEditingMessageId] = useState(null);
+-  const [editText, setEditText] = useState('');
+-
+   // Consolidating socket listeners into chatStore.js
+   // handleMessageDeleted, handleMessageSent, handleMessageEdited are now handled there.
+ 
+@@ -442,31 +524,30 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
+     setSelectedMessageForDelete(null);
+   };
+ 
+-  const startEditing = (msg) => {
+-    setEditingMessageId(msg._id);
+-    setEditText(msg.text);
++  const startEditing = (messageId, content) => {
++    setEditingMessageId(messageId);
++    setText(content);
++    setReplyingTo(null); // Clear reply context when editing
++    if (textInputRef.current) textInputRef.current.focus();
+   };
+ 
+   const cancelEditing = () => {
+     setEditingMessageId(null);
+-    setEditText('');
++    setText('');
+   };
+ 
+-  const submitEdit = async (e) => {
+-    e.preventDefault();
+-    if (!editText.trim()) return;
++  const submitEdit = async () => {
++    if (!text.trim() || !editingMessageId) return;
+ 
+     try {
+-      // Optimistic update
+-      setMessages(prev => prev.map(m => m._id === editingMessageId ? { ...m, text: editText, isEdited: true } : m));
+-
+-      socket.emit('editMessage', { messageId: editingMessageId, newText: editText });
+-      // Also call API for persistence guarantee if needed, but socket handler does DB save.
+-
+-      cancelEditing();
+-      toast.success("Message edited");
++      setMessages(prev => prev.map(m => m._id === editingMessageId ? { ...m, text: text, isEdited: true } : m));
++      socket.emit('editMessage', { messageId: editingMessageId, newText: text });
++      
++      setEditingMessageId(null);
++      setText('');
++      toast.success("Message updated");
+     } catch (err) {
+-      toast.error("Failed to edit");
++      toast.error("Failed to update message");
+     }
+   };
+ 
+@@ -571,9 +652,30 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
+   );
+ 
+   return (
+-    <div className="flex flex-col h-full bg-[#f8fafc] dark:bg-[#09090b] relative transition-all duration-300 w-full"
+-      style={{ backgroundImage: 'radial-gradient(var(--chat-pattern-color) 1px, transparent 1px)', backgroundSize: '16px 16px' }}
+-    >
++    <div className={`flex-1 flex flex-col min-w-0 bg-white dark:bg-[#09090b] relative transition-all duration-300 ${isSidebarOpen ? 'md:ml-0' : ''}`}>
++      
++      {/* Selection Mode Header Overlay */}
++      {selectionMode && (
++        <div className="absolute top-0 left-0 right-0 z-[100] h-16 bg-primary-600/90 backdrop-blur-xl border-b border-white/10 flex items-center justify-between px-6 animate-slideDown shadow-2xl">
++          <div className="flex items-center gap-4">
++            <button onClick={() => { setSelectionMode(false); setSelectedIds(new Set()); }} className="p-2 rounded-full hover:bg-white/10 text-white transition-colors">
++              <X size={20} />
++            </button>
++            <span className="font-bold text-white text-lg">{selectedIds.size} selected</span>
++          </div>
++          <div className="flex items-center gap-2">
++            <button 
++              onClick={handleBatchDelete}
++              disabled={selectedIds.size === 0}
++              className="px-4 py-2 rounded-xl bg-rose-500 hover:bg-rose-400 disabled:opacity-50 text-white font-bold text-sm transition-all flex items-center gap-2 shadow-lg shadow-rose-500/20"
++            >
++              <Trash2 size={16} />
++              Delete
++            </button>
++          </div>
++        </div>
++      )}
++
+       {/* Header */}
+       <div className="z-30 bg-chat-header-bg border-b border-chat-header-border shadow-sm shadow-black/20 sticky top-0 px-2.5 sm:px-4 md:px-6 py-2.5 sm:py-3.5 flex items-center justify-between transition-all duration-300">
+           <div className="flex items-center gap-4">
+@@ -889,10 +991,17 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
+                         handleReportMessage={handleReportMessage}
+                         handlePinMessage={handlePinMessage}
+                         editingMessageId={editingMessageId}
++                        activeActionId={activeActionId}
++                        setActiveActionId={setActiveActionId}
+                         submitEdit={submitEdit}
+                         cancelEditing={cancelEditing}
+-                        setEditText={setEditText}
+-                        editText={editText}
++                        setReplyingTo={setReplyingTo}
++                        selectionMode={selectionMode}
++                        setSelectionMode={setSelectionMode}
++                        selectedIds={selectedIds}
++                        toggleSelectMessage={toggleSelectMessage}
++                        starredIds={starredIds}
++                        handleStar={handleStar}
+                       />
+                     </div>
+                   );
+@@ -920,9 +1029,9 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
+           </div>
+         )}
+       </div>
+-      {/* Floating Input Area */}
+-      <div className="absolute bottom-4 sm:bottom-6 left-0 right-0 pointer-events-none z-30 transition-all duration-300 flex justify-center">
+-        <div className="w-full relative px-2 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1400px]">
++      <div className="absolute bottom-4 sm:bottom-6 left-0 right-0 pointer-events-none z-[40] transition-all duration-300 flex justify-center">
++        <div className="w-full relative px-2 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-[1400px] pointer-events-none">
++          <div className="w-full pointer-events-auto">
+           {/* Emoji/GIF Pickers - Improved styling */}
+           {showEmojiPicker && (
+             <Suspense fallback={<div className="absolute bottom-full mb-4 h-[350px] w-full sm:w-[350px] flex items-center justify-center bg-white dark:bg-[#16161e] rounded-3xl border border-slate-200 dark:border-white/5 shadow-2xl pointer-events-auto"><ClipLoader color="#6366f1" /></div>}>
+@@ -966,7 +1075,30 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
+ 
+           <form onSubmit={handleSend} className="relative flex items-end gap-3 w-full mx-auto z-10 pointer-events-auto">
+             {/* Input Bar Island */}
+-            <div className={`flex-1 flex items-end bg-white/90 dark:bg-[#0f0f12]/90 backdrop-blur-xl rounded-[28px] p-2 transition-all duration-300 shadow-2xl border ${isFocused ? 'ring-2 ring-primary-500/30 border-primary-500/40' : 'border-slate-200 dark:border-white/5'} ${isBlocked ? 'opacity-50 cursor-not-allowed' : ''}`}>
++            <div className={`flex-1 flex flex-col bg-white/90 dark:bg-[#0f0f12]/90 backdrop-blur-xl rounded-[28px] p-2 transition-all duration-300 shadow-2xl border ${isFocused ? 'ring-2 ring-primary-500/30 border-primary-500/40' : 'border-slate-200 dark:border-white/5'} ${isBlocked ? 'opacity-50 cursor-not-allowed' : ''}`}>
++              
++              {/* Reply/Edit Context Preview */}
++              {(replyingTo || editingMessageId) && (
++                <div className={`mx-2 mb-2 p-3 bg-black/5 dark:bg-white/5 rounded-2xl border-l-4 ${editingMessageId ? 'border-amber-500' : 'border-primary-500'} flex items-start gap-3 animate-premium-pop relative group/reply-prev`}>
++                  <div className="flex-1 min-w-0">
++                    <p className={`text-[11px] font-black uppercase tracking-widest mb-0.5 ${editingMessageId ? 'text-amber-500' : 'text-primary-400'}`}>
++                      {editingMessageId ? 'Editing Message' : (String(replyingTo?.senderId?._id || replyingTo?.senderId || '') === String(user?._id || user?.id) ? 'You' : (replyingTo?.senderId?.name || 'User'))}
++                    </p>
++                    <p className="text-sm text-slate-500 dark:text-slate-300 truncate">
++                      {editingMessageId ? messages.find(m => m._id === editingMessageId)?.text || '...' : replyingTo?.text}
++                    </p>
++                  </div>
++                  <button 
++                    type="button" 
++                    onClick={() => editingMessageId ? cancelEditing() : setReplyingTo(null)}
++                    className="p-1.5 rounded-full hover:bg-black/10 dark:hover:bg-white/10 text-slate-400 transition-colors"
++                  >
++                    <X size={14} strokeWidth={3} />
++                  </button>
++                </div>
++              )}
++
++              <div className="flex items-end">
+ 
+               {/* Media Attach Button */}
+               <div className="flex-shrink-0 flex items-center gap-1 pl-1">
+@@ -1034,6 +1166,7 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
+                 </button>
+               </div>
+             </div>
++          </div>
+ 
+             {/* Send Button */}
+             <button
+@@ -1111,6 +1244,7 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
+               />
+             </Suspense>
+           )}
++          </div>
+         </div>
+       </div>
+     </div>

@@ -1,0 +1,387 @@
+﻿[36mvite v5.4.21 [32mbuilding for development...[36m[39m
+transforming...
+[32mΓ£ô[39m 2282 modules transformed.
+rendering chunks...
+node.exe : [1m[33m[p
+lugin:vite:reporter][
+39m[22m [33m[plugin 
+vite:reporter] 
+At C:\Program Files\no
+dejs\npx.ps1:29 char:3
++   & $NODE_EXE 
+$NPX_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~
+    + CategoryInfo    
+          : 
+NotSpecified: (    
+[1m[33m[plugi...vite 
+   :reporter] 
+:String) [    ], 
+RemoteException
+    + 
+FullyQualifiedError   
+ Id : 
+NativeCommandErr    or
+ 
+(!) D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/node_modules/
+react-hot-toast/dist/i
+ndex.mjs is 
+dynamically imported 
+by D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/App.jsx, 
+D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/stores/chatSt
+ore.js, D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/stores/chatSt
+ore.js, D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/stores/chatSt
+ore.js, D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/stores/chatSt
+ore.js, D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/stores/chatSt
+ore.js but also 
+statically imported 
+by D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/App.jsx, 
+D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Ad
+dContactModal.jsx, 
+D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Ad
+dMemberModal.jsx, 
+D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Ch
+atWindow.jsx, D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Cr
+eateGroupModal.jsx, 
+D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Gr
+oupMembersModal.jsx, 
+D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Gr
+oupSettingsModal.jsx, 
+D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Jo
+inGroupModal.jsx, 
+D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Lo
+gin.jsx, D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Pr
+ofileSettings.jsx, 
+D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Re
+portModal.jsx, D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Si
+debar.jsx, D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/stores/authSt
+ore.js, dynamic 
+import will not move 
+module into another 
+chunk.
+[39m
+[1m[33m[plugin:vite:
+reporter][39m[22m 
+[33m[plugin 
+vite:reporter] 
+(!) D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/stores/chatSt
+ore.js is dynamically 
+imported by D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/stores/authSt
+ore.js but also 
+statically imported 
+by D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/App.jsx, 
+D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Ad
+dMemberModal.jsx, 
+D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Ch
+atWindow.jsx, D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Cr
+eateGroupModal.jsx, 
+D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Da
+shboard.jsx, D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Gr
+oupMembersModal.jsx, 
+D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Gr
+oupSettingsModal.jsx, 
+D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/In
+vitePage.jsx, D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Jo
+inGroupModal.jsx, 
+D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Me
+ssageItem.jsx, D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Pr
+ofileViewersPanel.jsx,
+ D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Si
+debar.jsx, D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Us
+erProfileModal.jsx, 
+dynamic import will 
+not move module into 
+another chunk.
+[39m
+[1m[33m[plugin:vite:
+reporter][39m[22m 
+[33m[plugin 
+vite:reporter] 
+(!) D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Re
+portModal.jsx is 
+dynamically imported 
+by D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Ch
+atWindow.jsx but also 
+statically imported 
+by D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Si
+debar.jsx, dynamic 
+import will not move 
+module into another 
+chunk.
+[39m
+[1m[33m[plugin:vite:
+reporter][39m[22m 
+[33m[plugin 
+vite:reporter] 
+(!) D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Co
+nfirmModal.jsx is 
+dynamically imported 
+by D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Ch
+atWindow.jsx but also 
+statically imported 
+by D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Si
+debar.jsx, dynamic 
+import will not move 
+module into another 
+chunk.
+[39m
+[1m[33m[plugin:vite:
+reporter][39m[22m 
+[33m[plugin 
+vite:reporter] 
+(!) D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Us
+erProfileModal.jsx is 
+dynamically imported 
+by D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Ch
+atWindow.jsx but also 
+statically imported 
+by D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Pr
+ofileViewersPanel.jsx,
+ D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Si
+debar.jsx, dynamic 
+import will not move 
+module into another 
+chunk.
+[39m
+[1m[33m[plugin:vite:
+reporter][39m[22m 
+[33m[plugin 
+vite:reporter] 
+(!) D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Gr
+oupMembersModal.jsx 
+is dynamically 
+imported by D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Ch
+atWindow.jsx but also 
+statically imported 
+by D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Si
+debar.jsx, dynamic 
+import will not move 
+module into another 
+chunk.
+[39m
+[1m[33m[plugin:vite:
+reporter][39m[22m 
+[33m[plugin 
+vite:reporter] 
+(!) D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Ad
+dMemberModal.jsx is 
+dynamically imported 
+by D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Ch
+atWindow.jsx but also 
+statically imported 
+by D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Si
+debar.jsx, dynamic 
+import will not move 
+module into another 
+chunk.
+[39m
+[1m[33m[plugin:vite:
+reporter][39m[22m 
+[33m[plugin 
+vite:reporter] 
+(!) D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Gr
+oupSettingsModal.jsx 
+is dynamically 
+imported by D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Ch
+atWindow.jsx but also 
+statically imported 
+by D:/New 
+folder/Projects with G
+ra/Real-Time-Chat/fron
+tend/src/components/Si
+debar.jsx, dynamic 
+import will not move 
+module into another 
+chunk.
+[39m
+computing gzip size...
+[2mdist/[22m[32mindex.html                                 [39m[1m[2m  1.21 kB[22m[1m[22m[2m Γöé gzip:   0.65 kB[22m
+[2mdist/[22m[32massets/mypicture-CXFLT0uT.jpg              [39m[1m[2m275.52 kB[22m[1m[22m
+[2mdist/[22m[32massets/beatchatlogo-PBax_Uol.png           [39m[1m[2m547.03 kB[22m[1m[22m
+[2mdist/[22m[35massets/index-Cs7eAuLd.css                  [39m[1m[2m 96.48 kB[22m[1m[22m[2m Γöé gzip:  15.65 kB[22m
+[2mdist/[22m[36massets/GifPicker-D3XOB5j5.js               [39m[1m[2m  3.58 kB[22m[1m[22m[2m Γöé gzip:   1.52 kB[22m
+[2mdist/[22m[36massets/SharedMedia-B06eb2za.js             [39m[1m[2m  6.60 kB[22m[1m[22m[2m Γöé gzip:   2.13 kB[22m
+[2mdist/[22m[36massets/emoji-picker-react.esm-BU7SVya1.js  [39m[1m[2m309.10 kB[22m[1m[22m[2m Γöé gzip:  74.99 kB[22m
+[2mdist/[22m[36massets/index-rg_eGALv.js                   [39m[1m[33m641.00 kB[39m[22m[2m Γöé gzip: 190.67 kB[22m
+[33m
+(!) Some chunks are 
+larger than 500 kB 
+after minification. 
+Consider:
+- Using dynamic 
+import() to 
+code-split the 
+application
+- Use build.rollupOpti
+ons.output.manualChunk
+s to improve 
+chunking: https://roll
+upjs.org/configuration
+-options/#output-manua
+lchunks
+- Adjust chunk size 
+limit for this 
+warning via build.chun
+kSizeWarningLimit.[39
+m
+[32mΓ£ô built in 7.43s[39m
