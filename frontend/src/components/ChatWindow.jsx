@@ -1138,9 +1138,9 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
               inputText={text}
             />
 
-            <form onSubmit={handleSend} className="relative flex items-end gap-3 w-full mx-auto z-10 pointer-events-auto">
+            <form onSubmit={handleSend} className="relative flex items-center gap-2 w-full mx-auto z-10 pointer-events-auto p-2 sm:p-3">
               {/* Input Bar Island */}
-              <div className={`flex-1 flex flex-col bg-white/90 dark:bg-[#0f0f12]/90 backdrop-blur-xl rounded-[28px] p-2 transition-all duration-300 shadow-2xl border ${isFocused ? 'ring-2 ring-primary-500/30 border-primary-500/40' : 'border-slate-200 dark:border-white/5'} ${isBlocked ? 'opacity-50 cursor-not-allowed' : ''}`}>
+              <div className={`flex-1 flex flex-col bg-white/90 dark:bg-[#0f0f12]/90 backdrop-blur-xl rounded-[26px] p-1.5 transition-all duration-300 shadow-2xl border ${isFocused ? 'ring-2 ring-primary-500/30 border-primary-500/40' : 'border-slate-200 dark:border-white/5'} ${isBlocked ? 'opacity-50 cursor-not-allowed' : ''}`}>
 
                 {/* Reply/Edit Context Preview */}
                 {(replyingTo || editingMessageId) && (
@@ -1163,12 +1163,11 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
                   </div>
                 )}
 
-                <div className="flex items-end">
+                <div className="flex items-center">
 
                   {/* Media Attach Button */}
-                  {/* Media Attach Button */}
-                  <div className="flex-shrink-0 flex items-center gap-1 pl-1">
-                    <label className={`p-2.5 rounded-full hover:bg-white/5 text-slate-400 hover:text-white transition-all duration-200 cursor-pointer ${isBlocked || isSending ? 'opacity-50 pointer-events-none' : ''}`}>
+                  <div className="flex-shrink-0 flex items-center pl-1">
+                    <label className={`p-1.5 rounded-full hover:bg-white/5 text-slate-400 hover:text-white transition-all duration-200 cursor-pointer ${isBlocked || isSending ? 'opacity-50 pointer-events-none' : ''}`}>
                       <input
                         ref={docInputRef}
                         type="file"
@@ -1177,23 +1176,25 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
                         className="hidden"
                         disabled={isBlocked || isSending}
                       />
-                      <Paperclip size={20} className="transform rotate-45" />
+                      <Paperclip size={18} className="transform rotate-45" />
                     </label>
-                    <label className={`p-2.5 rounded-full hover:bg-white/5 text-slate-400 hover:text-white transition-all duration-200 cursor-pointer flex ${isBlocked || isSending ? 'opacity-50 pointer-events-none' : ''}`}>
-                      <input
-                        ref={imgInputRef}
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => e.target.files[0] && setImage(e.target.files[0])}
-                        className="hidden"
-                        disabled={isBlocked || isSending}
-                      />
-                      <ImageIcon size={20} />
-                    </label>
+                    <div className={`overflow-hidden transition-all duration-300 ease-in-out flex items-center ${text ? 'w-0 opacity-0 -translate-x-2' : 'w-[40px] opacity-100 translate-x-0'}`}>
+                      <label className={`p-1.5 rounded-full hover:bg-white/5 text-slate-400 hover:text-white transition-all duration-200 cursor-pointer flex ${isBlocked || isSending ? 'opacity-50 pointer-events-none' : ''}`}>
+                        <input
+                          ref={imgInputRef}
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => e.target.files[0] && setImage(e.target.files[0])}
+                          className="hidden"
+                          disabled={isBlocked || isSending}
+                        />
+                        <ImageIcon size={18} />
+                      </label>
+                    </div>
                   </div>
 
                   {/* Text Input */}
-                  <div className="flex-1 min-w-0 relative mx-1">
+                  <div className="flex-1 min-w-0 relative mx-0">
                     {image && (
                       <div className="absolute bottom-full left-0 mb-4 bg-white dark:bg-[#16161e] p-2.5 rounded-2xl flex items-center gap-3 text-sm border border-slate-200 dark:border-white/5 shadow-2xl backdrop-blur-xl z-40 animate-slideUp">
                         <div className="w-8 h-8 rounded-lg bg-primary-500/20 flex items-center justify-center"><Paperclip size={14} className="text-primary-400" /></div>
@@ -1211,26 +1212,8 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
                       placeholder={isBlocked ? "You have blocked this user" : "Write something..."}
                       disabled={isBlocked || isSending}
                       rows={1}
-                      className="w-full bg-transparent border-0 py-3 px-3 focus:outline-none focus:ring-0 focus:border-none text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium disabled:opacity-50 text-[15px] resize-none overflow-y-auto scrollbar-hide h-[48px]"
+                      className="w-full bg-transparent border-0 py-2.5 px-1 focus:outline-none focus:ring-0 focus:border-none text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium disabled:opacity-50 text-[15px] resize-none overflow-y-auto scrollbar-hide h-[42px]"
                     />
-                  </div>
-
-                  {/* Emoji & GIF Toggles */}
-                  <div className="flex items-center gap-1 pr-1">
-                    <button
-                      type="button"
-                      onClick={() => { setShowEmojiPicker(!showEmojiPicker); setShowGifPicker(false); }}
-                      className={`p-2.5 rounded-full hover:bg-white/5 text-slate-400 hover:text-yellow-400 transition-all duration-200 ${isBlocked ? 'opacity-50' : ''}`}
-                    >
-                      <Smile size={22} />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => { setShowGifPicker(!showGifPicker); setShowEmojiPicker(false); }}
-                      className={`px-3 py-1.5 rounded-xl hover:bg-white/5 text-slate-500 hover:text-white transition-all duration-200 font-black text-[10px] tracking-widest hidden sm:block border border-transparent hover:border-white/5`}
-                    >
-                      GIF
-                    </button>
                   </div>
                 </div>
               </div>
@@ -1239,12 +1222,12 @@ const ChatWindow = ({ isSidebarOpen, setIsSidebarOpen }) => {
               <button
                 type="submit"
                 disabled={(!text.trim() && !image) || isBlocked || isSending}
-                className={`flex-shrink-0 w-[48px] h-[48px] sm:w-[54px] sm:h-[54px] rounded-full transition-all duration-300 transform active:scale-95 flex items-center justify-center shadow-lg group/send ${(!text.trim() && !image) || isBlocked ? 'bg-white/5 text-slate-600 cursor-not-allowed shadow-none' : 'bg-primary-600 hover:bg-primary-500 text-white shadow-primary-500/20'}`}
+                className={`flex-shrink-0 w-[42px] h-[42px] sm:w-[46px] sm:h-[46px] rounded-full transition-all duration-300 transform active:scale-95 flex items-center justify-center shadow-lg group/send ${(!text.trim() && !image) || isBlocked ? 'bg-white/5 text-slate-600 cursor-not-allowed shadow-none' : 'bg-primary-600 hover:bg-primary-500 text-white shadow-primary-500/20'}`}
               >
                 {isSending ? (
-                  <ClipLoader size={20} color="#fff" />
+                  <ClipLoader size={18} color="#fff" />
                 ) : (
-                  <Send size={20} className={`transition-transform duration-500 ${(!text.trim() && !image) ? '' : 'group-hover/send:translate-x-0.5 group-hover/send:-translate-y-0.5 group-hover/send:scale-110'}`} />
+                  <Send size={18} className={`transition-transform duration-500 ${(!text.trim() && !image) ? '' : 'group-hover/send:translate-x-0.5 group-hover/send:-translate-y-0.5 group-hover/send:scale-110'}`} />
                 )}
               </button>
             </form>
