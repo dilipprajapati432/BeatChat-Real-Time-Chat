@@ -8,6 +8,7 @@ import SplashScreen from './components/SplashScreen';
 
 
 import InvitePage from './components/InvitePage';
+import NotFound from './components/NotFound';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 
@@ -96,6 +97,9 @@ function App() {
             {/* Invite Route - Accessible to all (Landing page handles logic) */}
             <Route path="/invite/:userId" element={<InvitePage />} />
             <Route path="/" element={user ? <Dashboard /> : <Navigate to="/login" />} />
+            
+            {/* Catch-all 404 route */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
         <Toaster position="top-right" />

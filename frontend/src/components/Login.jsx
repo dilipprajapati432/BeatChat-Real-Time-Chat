@@ -135,8 +135,27 @@ const Login = () => {
     if (token) { setResetToken(token); setView('reset'); }
   }
 
-  const goBack = () => {
+  const resetFields = () => {
+    setIdentifier('');
+    setEmail('');
+    setUsername('');
+    setPassword('');
+    setConfirmPassword('');
+    setName('');
+    setPhone('');
+    setOtp('');
     setFieldErrors({});
+    setAvatar(null);
+    setAvatarPreview(null);
+  };
+
+  const switchView = (newView) => {
+    resetFields();
+    setView(newView);
+  };
+
+  const goBack = () => {
+    resetFields();
     if (view === 'register' || view === 'forgot') setView('login');
     else if (view === 'verify') setView('register');
     else if (view === 'verify-reset') setView('forgot');
@@ -571,7 +590,7 @@ const Login = () => {
                       />
                       <span style={{ fontSize: '12px', color: '#64748b', fontWeight: 500, userSelect: 'none' }}>Remember me</span>
                     </label>
-                    <button type="button" onClick={() => setView('forgot')} style={{
+                    <button type="button" onClick={() => switchView('forgot')} style={{
                       background: 'none', border: 'none', cursor: 'pointer',
                       fontSize: '12px', color: '#64748b', fontWeight: 500,
                       transition: 'color 0.2s', padding: 0,
@@ -637,7 +656,7 @@ const Login = () => {
               {/* Footer switch */}
               <div style={{ marginTop: '20px', textAlign: 'center', fontSize: '13px', color: '#64748b' }}>
                 {view === 'login' && <>Don't have an account?{' '}
-                  <button onClick={() => setView('register')} style={{
+                  <button onClick={() => switchView('register')} style={{
                     background: 'none', border: 'none', cursor: 'pointer', padding: 0,
                     color: '#a78bfa', fontWeight: 700, fontSize: '13px',
                     transition: 'color 0.2s',
@@ -648,7 +667,7 @@ const Login = () => {
                   </button>
                 </>}
                 {(view === 'register' || view === 'verify') && <>Have an account?{' '}
-                  <button onClick={() => setView('login')} style={{
+                  <button onClick={() => switchView('login')} style={{
                     background: 'none', border: 'none', cursor: 'pointer', padding: 0,
                     color: '#a78bfa', fontWeight: 700, fontSize: '13px',
                     transition: 'color 0.2s',
@@ -659,7 +678,7 @@ const Login = () => {
                   </button>
                 </>}
                 {(view === 'forgot' || view === 'reset' || view === 'verify-reset') && (
-                  <button onClick={() => setView('login')} style={{
+                  <button onClick={() => switchView('login')} style={{
                     background: 'none', border: 'none', cursor: 'pointer', padding: 0,
                     color: '#a78bfa', fontWeight: 700, fontSize: '13px',
                   }}>← Back to Login</button>
